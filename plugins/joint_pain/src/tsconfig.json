@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "target": "ES2019",
+        "baseUrl": "plugin",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "typeRoots": [
+            "./node_modules/blockbench-types/types"
+        ],
+        "inlineSourceMap": false,
+        "inlineSources": false,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": false,
+        "noUncheckedIndexedAccess": false,
+        "lib": [
+            "ES2019",
+            "DOM",
+        ],
+        "rootDir": "plugin",
+        "allowJs": true,
+        "declaration": false,
+        "outDir": "dist",
+        "skipLibCheck": true,
+        "removeComments": true,
+    },
+    "include": [
+        "plugin/global.d.ts",
+        "plugin/extensions.ts",
+        "plugin/plugin.ts"
+    ],
+    "exclude": [
+        "eslint.config.mjs",
+        "node_modules"
+    ]
+}
