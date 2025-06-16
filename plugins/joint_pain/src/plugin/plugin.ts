@@ -1,10 +1,11 @@
-import { deferDelete, deferRemoveStyle, runDeferred } from './defer';
+import { deferDelete, runDeferred } from './defer';
 import { loadSkinnedMeshPreview } from './skinned-mesh-preview';
 import { loadGltfImport } from './gltf-import';
 import { loadGltfExport } from './gltf-export';
 import { loadWeightsMode } from './weights-mode';
 import { loadBlenderIntegration } from './blender-integration';
 import globalStyles from './components/styles.css'
+import { addStyle } from './util';
 
 BBPlugin.register('joint_pain', {
     
@@ -39,13 +40,14 @@ BBPlugin.register('joint_pain', {
             }
         }));
 
-        deferRemoveStyle(globalStyles);
+        addStyle(globalStyles);
 
         loadWeightsMode();
         loadSkinnedMeshPreview();
         loadGltfImport();
         loadGltfExport();
         loadBlenderIntegration();
+
     },
     
     onunload() {

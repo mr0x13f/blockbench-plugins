@@ -1,6 +1,7 @@
-import { deferDelete, deferRemoveStyle } from './defer';
+import { defer, deferDelete } from './defer';
 import WeightsPanel from './components/WeightsPanel.vue';
 import weightsPanelStyles from './components/weights-panel.css'
+import { addStyle } from './util';
 
 export function loadWeightsMode() {
 
@@ -13,7 +14,7 @@ export function loadWeightsMode() {
     // TODO: in group dropdown, sort groups by distance to the mesh's group's pivot
     // TODO: have animation move bones instead of groups (same thing?)
 
-    deferRemoveStyle(weightsPanelStyles);
+    addStyle(weightsPanelStyles);
 
     deferDelete(new Mode('weights', {
         name: 'Weights',
@@ -65,6 +66,10 @@ export function loadWeightsMode() {
             height: 400,
         },
     }));
+    
+    // Fix for mode selector not updating right away when plugin loads or unloads
+    refreshModeSelector();
+    defer(refreshModeSelector);
 }
 
 function createHashColor(input: string, saturation: number, lightness: number) {
@@ -90,3 +95,7 @@ function createColorStripGradient(angle: number, ...colors: string[]) {
     })`;
 }
 
+// Fix for mode selector not updating right away when plugin loads or unloads
+function refreshModeSelector() {
+    document.querySelector('#mode_selector')?.['__vue__']?.$forceUpdate();
+}

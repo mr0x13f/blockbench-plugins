@@ -11,21 +11,16 @@
                 return defer((() => deletable.delete())), deletable;
             }, exports.runDeferred = function runDeferred() {
                 for (let lambda of deferred.reverse()) lambda();
-            }, exports.deferRemoveElement = deferRemoveElement, exports.deferRemoveStyle = function deferRemoveStyle(style) {
-                deferRemoveElement(document.head.appendChild(Interface.createElement("style", {
-                    type: "text/css"
-                }, style)));
+            }, exports.deferRemoveElement = function deferRemoveElement(element) {
+                return defer((() => {
+                    var _a;
+                    return null === (_a = element.parentElement) || void 0 === _a ? void 0 : _a.removeChild(element);
+                })), element;
             }
             /***/;
             let deferred = [];
             function defer(lambda) {
                 deferred.push(lambda);
-            }
-            function deferRemoveElement(element) {
-                return defer((() => {
-                    var _a;
-                    return null === (_a = element.parentElement) || void 0 === _a ? void 0 : _a.removeChild(element);
-                })), element;
             }
         },
         /***/ 43: 
@@ -369,13 +364,18 @@
         }
         /***/ ,
         /***/ 266: 
-        /***/ (__unused_webpack_module, exports) => {
+        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.isVertexWeightEnabledFor = function isVertexWeightEnabledFor(project) {
                 return null != (null == project ? void 0 : project.jp_vertex_weights) && "disabled" !== project.jp_vertex_weights;
+            }, exports.addStyle = function addStyle(style) {
+                (0, defer_1.deferRemoveElement)(document.head.appendChild(Interface.createElement("style", {
+                    type: "text/css"
+                }, style)));
             }
             /***/;
+            const defer_1 = __webpack_require__(40);
         },
         /***/ 351: 
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {
@@ -402,7 +402,7 @@
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.loadWeightsMode = function loadWeightsMode() {
-                (0, defer_1.deferRemoveStyle)(weights_panel_css_1.default), (0, defer_1.deferDelete)(new Mode("weights", {
+                (0, util_1.addStyle)(weights_panel_css_1.default), (0, defer_1.deferDelete)(new Mode("weights", {
                     name: "Weights",
                     category: "navigate",
                     condition: {
@@ -444,10 +444,14 @@
                         float_size: [ 300, 400 ],
                         height: 400
                     }
-                }));
+                })), refreshModeSelector(), (0, defer_1.defer)(refreshModeSelector);
             };
-            const defer_1 = __webpack_require__(40), WeightsPanel_vue_1 = __importDefault(__webpack_require__(43)), weights_panel_css_1 = __importDefault(__webpack_require__(868));
-        },
+            const defer_1 = __webpack_require__(40), WeightsPanel_vue_1 = __importDefault(__webpack_require__(43)), weights_panel_css_1 = __importDefault(__webpack_require__(868)), util_1 = __webpack_require__(266);
+            function refreshModeSelector() {
+                var _a, _b;
+                null === (_b = null === (_a = document.querySelector("#mode_selector")) || void 0 === _a ? void 0 : _a.__vue__) || void 0 === _b || _b.$forceUpdate();
+            }
+            /***/        },
         /***/ 740: 
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {
             Object.defineProperty(exports, "__esModule", {
@@ -503,7 +507,7 @@
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             });
-            const defer_1 = __webpack_require__(40), skinned_mesh_preview_1 = __webpack_require__(193), gltf_import_1 = __webpack_require__(93), gltf_export_1 = __webpack_require__(746), weights_mode_1 = __webpack_require__(361), blender_integration_1 = __webpack_require__(351), styles_css_1 = __importDefault(__webpack_require__(950));
+            const defer_1 = __webpack_require__(40), skinned_mesh_preview_1 = __webpack_require__(193), gltf_import_1 = __webpack_require__(93), gltf_export_1 = __webpack_require__(746), weights_mode_1 = __webpack_require__(361), blender_integration_1 = __webpack_require__(351), styles_css_1 = __importDefault(__webpack_require__(950)), util_1 = __webpack_require__(266);
             BBPlugin.register("joint_pain", {
                 title: "Joint Pain",
                 author: "0x13F",
@@ -522,7 +526,7 @@
                             one: "1 Weight per Vertex (Retro)",
                             four: "4 Weights per Vertex (Modern)"
                         }
-                    })), (0, defer_1.deferRemoveStyle)(styles_css_1.default), (0, weights_mode_1.loadWeightsMode)(), 
+                    })), (0, util_1.addStyle)(styles_css_1.default), (0, weights_mode_1.loadWeightsMode)(), 
                     (0, skinned_mesh_preview_1.loadSkinnedMeshPreview)(), (0, gltf_import_1.loadGltfImport)(), 
                     (0, gltf_export_1.loadGltfExport)(), (0, blender_integration_1.loadBlenderIntegration)();
                 },
