@@ -1,9 +1,10 @@
-import { deferDelete, runDeferred } from './defer';
+import { deferDelete, deferRemoveStyle, runDeferred } from './defer';
 import { loadSkinnedMeshPreview } from './skinned-mesh-preview';
 import { loadGltfImport } from './gltf-import';
 import { loadGltfExport } from './gltf-export';
 import { loadWeightsMode } from './weights-mode';
 import { loadBlenderIntegration } from './blender-integration';
+import globalStyles from './components/styles.css'
 
 BBPlugin.register('joint_pain', {
     
@@ -19,8 +20,17 @@ BBPlugin.register('joint_pain', {
 
         // TODO: new setting "show group pivots in edit and animate mode"
 
-        deferDelete(new Property(ModelProject, 'enum', 'vertex_weights', {
+        deferDelete(new Property(ModelProject, 'enum', 'jp_vertex_weights', {
             label: 'Joint Pain: Vertex Weights',
+            description: '' + 
+                'Vertex Weights mode for the project. ' +
+                'The number of weights per vertex determines how many different bones ' +
+                'can have greater than zero influence on any given vertex. ' +
+                '"Four" is common for modern styles and is the max amount supported. ' +
+                'It offers the most freedom but may be harder to work with. ' +
+                '"One" used to be the standard with early 3D graphics. ' +
+                'It can be easier to work with and may help achieve a more authentic retro style. ' +
+                '',
             default: 'disabled',
             options: {
                 'disabled': 'Disabled',
@@ -28,6 +38,8 @@ BBPlugin.register('joint_pain', {
                 'four':     '4 Weights per Vertex (Modern)',
             }
         }));
+
+        deferRemoveStyle(globalStyles);
 
         loadWeightsMode();
         loadSkinnedMeshPreview();

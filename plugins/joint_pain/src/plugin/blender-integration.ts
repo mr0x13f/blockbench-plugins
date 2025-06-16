@@ -1,6 +1,6 @@
 import { defer, deferDelete } from './defer';
-import blenderScriptCreateLinkedScene from './blender_create_linked_scene.py';
-import blenderScripCheckAddon from './blender_check_addon.py';
+import blenderScriptCreateLinkedScene from './shaders/blender_create_linked_scene.py';
+import blenderScripCheckAddon from './shaders/blender_check_addon.py';
 
 export function loadBlenderIntegration() {
 

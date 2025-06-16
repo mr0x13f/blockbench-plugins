@@ -1,26 +1,204 @@
 /*! This file was automatically generated using webpack, based on src/plugin */
 /******/ (() => {
     // webpackBootstrap
-    /******/ var __webpack_modules__ = {
+    /******/ "use strict";
+    /******/    var __webpack_modules__ = {
         /***/ 40: 
         /***/ (__unused_webpack_module, exports) => {
-            "use strict";
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.defer = defer, exports.deferDelete = function deferDelete(deletable) {
                 return defer((() => deletable.delete())), deletable;
             }, exports.runDeferred = function runDeferred() {
                 for (let lambda of deferred.reverse()) lambda();
+            }, exports.deferRemoveElement = deferRemoveElement, exports.deferRemoveStyle = function deferRemoveStyle(style) {
+                deferRemoveElement(document.head.appendChild(Interface.createElement("style", {
+                    type: "text/css"
+                }, style)));
             }
             /***/;
             let deferred = [];
             function defer(lambda) {
                 deferred.push(lambda);
             }
+            function deferRemoveElement(element) {
+                return defer((() => {
+                    var _a;
+                    return null === (_a = element.parentElement) || void 0 === _a ? void 0 : _a.removeChild(element);
+                })), element;
+            }
         },
+        /***/ 43: 
+        /***/ (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+            // ESM COMPAT FLAG
+            __webpack_require__.r(__webpack_exports__), 
+            // EXPORTS
+            __webpack_require__.d(__webpack_exports__, {
+                __esModule: () => /* reexport */ WeightsPanelvue_type_script_lang_ts /* __esModule */ .B,
+                default: () => /* binding */ WeightsPanel
+            });
+            // ./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./plugin/components/WeightsPanel.vue?vue&type=template&id=7f90dbc0
+            var render = function render() {
+                var _vm = this, _c = _vm._self._c;
+                return _c("div", {
+                    staticClass: "jp-weights-panel"
+                }, [ _c("table", {
+                    staticClass: "jp-weights-table"
+                }, [ _c("tr", [ _c("th", {
+                    staticStyle: {
+                        "font-weight": "normal"
+                    }
+                }, [ _c("i", {
+                    staticClass: "fa_big icon far fa-gem"
+                }), _vm._v(" "), _c("span", {
+                    style: {
+                        background: _vm.mesh.backgroundGradient,
+                        "border-radius": "5px",
+                        color: "#cacad4",
+                        "text-shadow": "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000",
+                        padding: "2px 10px",
+                        "font-weight": "bold",
+                        "font-size": "1.1em"
+                    }
+                }, [ _vm._v("\n                    " + _vm._s(_vm.mesh.name) + "\n                ") ]) ]), _vm._v(" "), _vm._l(_vm.mesh.groups, (function(group, groupIndex) {
+                    return _c("th", {
+                        key: groupIndex,
+                        staticClass: "jp-group-header"
+                    }, [ _c("span", 0 === groupIndex ? [ _c("span", {
+                        staticClass: "jp-parent-indicator"
+                    }, [ _vm._v("parent group") ]), _vm._v(" "), _c("br"), _vm._v(" "), _c("i", {
+                        staticClass: "material-icons notranslate icon",
+                        style: {
+                            color: group.color
+                        }
+                    }, [ _vm._v("folder") ]), _vm._v(" "), _c("span", {
+                        staticClass: "jp-parent-name"
+                    }, [ _vm._v(_vm._s(group.name)) ]) ] : [ _c("br"), _vm._v(" "), _c("i", {
+                        staticClass: "material-icons notranslate icon",
+                        style: {
+                            color: group.color
+                        }
+                    }, [ _vm._v("folder") ]), _vm._v(" "), _c("input", {
+                        attrs: {
+                            type: "text"
+                        },
+                        domProps: {
+                            value: group.name
+                        },
+                        on: {
+                            focus: function($event) {}
+                        }
+                    }), _vm._v(" "), _c("i", {
+                        staticClass: "jp-group-remove material-icons notranslate icon"
+                    }, [ _vm._v("close") ]) ]) ]);
+                })), _vm._v(" "), _vm._m(0) ], 2), _vm._v(" "), _vm._l(_vm.mesh.vertices, (function(vertex) {
+                    return _c("tr", {
+                        key: vertex.id,
+                        staticClass: "jp-vertex-row"
+                    }, [ _c("td", {
+                        staticClass: "jp-weight-vertex-cell"
+                    }, [ _c("div", {
+                        staticClass: "jp-vertex-component jp-corner jp-corner-x"
+                    }, [ _vm._v(_vm._s(vertex.pos[0])) ]), _vm._v(" "), _c("div", {
+                        staticClass: "jp-vertex-component jp-corner jp-corner-y"
+                    }, [ _vm._v(_vm._s(vertex.pos[1])) ]), _vm._v(" "), _c("div", {
+                        staticClass: "jp-vertex-component jp-corner jp-corner-z"
+                    }, [ _vm._v(_vm._s(vertex.pos[2])) ]) ]), _vm._v(" "), _vm._l(vertex.weights, (function(weight, groupIndex) {
+                        return _c("td", {
+                            key: groupIndex,
+                            staticClass: "jp-weight-percentage-cell",
+                            class: {
+                                "jp-has-influence": weight > 0,
+                                "jp-no-influence": 0 === weight
+                            },
+                            style: {
+                                "--group-color-dark": _vm.mesh.groups[groupIndex].dark
+                            }
+                        }, [ "one" === _vm.projectVertexWeightSetting ? _c("div", [ _c("input", {
+                            attrs: {
+                                type: "radio"
+                            },
+                            domProps: {
+                                checked: weight > 0
+                            }
+                        }) ]) : _c("div", [ _vm._v("\n                    " + _vm._s(100 * weight) + "%\n                ") ]) ]);
+                    })) ], 2);
+                })) ], 2) ]);
+            };
+            render._withStripped = !0;
+            // ./plugin/components/WeightsPanel.vue?vue&type=template&id=7f90dbc0
+            // EXTERNAL MODULE: ./node_modules/ts-loader/index.js??clonedRuleSet-1!./node_modules/vue-loader/lib/index.js??vue-loader-options!./plugin/components/WeightsPanel.vue?vue&type=script&lang=ts
+            var WeightsPanelvue_type_script_lang_ts = __webpack_require__(224);
+            var component = // ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
+            /* globals __VUE_SSR_CONTEXT__ */
+            // IMPORTANT: Do NOT use ES2015 features in this file (except for modules).
+            // This module is a runtime utility for cleaner component module output and will
+            // be included in the final webpack user bundle.
+            function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier /* server only */ , shadowMode /* vue-cli only */) {
+                // Vue.extend constructor export interop
+                var hook, options = "function" == typeof scriptExports ? scriptExports.options : scriptExports;
+                // render functions
+                                if (render && (options.render = render, options.staticRenderFns = staticRenderFns, 
+                options._compiled = !0), 
+                // functional template
+                functionalTemplate && (options.functional = !0), 
+                // scopedId
+                scopeId && (options._scopeId = "data-v-" + scopeId), moduleIdentifier ? (
+                // server build
+                hook = function(context) {
+                    // 2.3 injection
+                    // functional
+                    // 2.2 with runInNewContext: true
+                    (context = context || // cached call
+                    this.$vnode && this.$vnode.ssrContext || // stateful
+                    this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (context = __VUE_SSR_CONTEXT__), 
+                    // inject component styles
+                    injectStyles && injectStyles.call(this, context), 
+                    // register component module identifier for async chunk inferrence
+                    context && context._registeredComponents && context._registeredComponents.add(moduleIdentifier);
+                }
+                // used by ssr in case component is cached and beforeCreate
+                // never gets called
+                , options._ssrRegister = hook) : injectStyles && (hook = shadowMode ? function() {
+                    injectStyles.call(this, (options.functional ? this.parent : this).$root.$options.shadowRoot);
+                } : injectStyles), hook) if (options.functional) {
+                    // for template-only hot-reload because in that case the render fn doesn't
+                    // go through the normalizer
+                    options._injectStyles = hook;
+                    // register for functional component in vue file
+                                        var originalRender = options.render;
+                    options.render = function renderWithStyleInjection(h, context) {
+                        return hook.call(context), originalRender(h, context);
+                    };
+                } else {
+                    // inject component registration as beforeCreate hook
+                    var existing = options.beforeCreate;
+                    options.beforeCreate = existing ? [].concat(existing, hook) : [ hook ];
+                }
+                return {
+                    exports: scriptExports,
+                    options
+                };
+            }(WeightsPanelvue_type_script_lang_ts /* default */ .A, render, [ function() {
+                var _c = this._self._c;
+                return _c("th", [ _c("br"), this._v(" "), _c("i", {
+                    staticClass: "material-icons notranslate icon"
+                }, [ this._v("add") ]), this._v(" "), _c("input", {
+                    attrs: {
+                        type: "text",
+                        placeholder: "Add Group..."
+                    }
+                }) ]);
+            } ], !1, null, null, null)
+            /* harmony default export */;
+            const WeightsPanel = component.exports;
+            /***/        },
+        /***/ 48: 
+        /***/ module => {
+            module.exports = "// Vertex shader that will replace the one used on textures\r\n// Based on texture.js @ 64\r\n// Edited to add skinning\r\n// Also changed the antialising bleed fix to an ifdef\r\n// Note that we use MAX_BONES_JP instead of THREE.js's normal MAX_BONES\r\n// because it's forcefully inserting a stupid value like 1024\r\n// and we can't change that.\r\n\r\nattribute float highlight;\r\n\r\nuniform bool SHADE;\r\nuniform int LIGHTSIDE;\r\n\r\n#ifdef USE_SKINNING\r\nuniform mat4 boneMatrices[ MAX_BONES_JP ];\r\n#endif\r\n\r\n#ifdef ANTIALIAS_BLEED_FIX\r\ncentroid varying vec2 vUv;\r\n#else\r\nvarying vec2 vUv;\r\n#endif\r\n\r\nvarying float light;\r\nvarying float lift;\r\n\r\nfloat AMBIENT = 0.5;\r\nfloat XFAC = -0.15;\r\nfloat ZFAC = 0.05;\r\n\r\nvoid main()\r\n{\r\n    mat4 skinnedModelViewMatrix = modelViewMatrix;\r\n\r\n#ifdef USE_SKINNING\r\n    skinnedModelViewMatrix = viewMatrix * (\r\n        skinWeight.x * boneMatrices[int(skinIndex.x)] +\r\n        skinWeight.y * boneMatrices[int(skinIndex.y)] +\r\n        skinWeight.z * boneMatrices[int(skinIndex.z)] +\r\n        skinWeight.w * boneMatrices[int(skinIndex.w)] );\r\n#endif\r\n\r\n    if (SHADE) {\r\n\r\n        vec3 N = normalize( mat3(skinnedModelViewMatrix) * normal );\r\n\r\n        if (LIGHTSIDE == 1) {\r\n            float temp = N.y;\r\n            N.y = N.z * -1.0;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 2) {\r\n            float temp = N.y;\r\n            N.y = N.x;\r\n            N.x = temp;\r\n        }\r\n        if (LIGHTSIDE == 3) {\r\n            N.y = N.y * -1.0;\r\n        }\r\n        if (LIGHTSIDE == 4) {\r\n            float temp = N.y;\r\n            N.y = N.z;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 5) {\r\n            float temp = N.y;\r\n            N.y = N.x * -1.0;\r\n            N.x = temp;\r\n        }\r\n\r\n        float yLight = (1.0+N.y) * 0.5;\r\n        light = yLight * (1.0-AMBIENT) + N.x*N.x * XFAC + N.z*N.z * ZFAC + AMBIENT;\r\n\r\n    } else {\r\n\r\n        light = 1.0;\r\n\r\n    }\r\n\r\n    if (highlight == 2.0) {\r\n        lift = 0.22;\r\n    } else if (highlight == 1.0) {\r\n        lift = 0.1;\r\n    } else {\r\n        lift = 0.0;\r\n    }\r\n    \r\n    vUv = uv;\r\n    vec4 mvPosition = skinnedModelViewMatrix * vec4( position, 1.0 );\r\n    gl_Position = projectionMatrix * mvPosition;\r\n}\r\n";
+            /***/        },
         /***/ 93: 
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-            "use strict";
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.loadGltfImport = function loadGltfImport() {
@@ -39,7 +217,6 @@
         /***/ ,
         /***/ 193: 
         /***/ function(__unused_webpack_module, exports, __webpack_require__) {
-            "use strict";
             var __importDefault = this && this.__importDefault || function(mod) {
                 return mod && mod.__esModule ? mod : {
                     default: mod
@@ -94,7 +271,7 @@
                 }))), initOrDestroyPreview();
             };
             const defer_1 = __webpack_require__(40), replace_method_1 = __webpack_require__(740), util_1 = __webpack_require__(266);
-            __importDefault(__webpack_require__(585));
+            __importDefault(__webpack_require__(48));
             function replaceRootWithBone() {
                 if (null == (null === Project || void 0 === Project ? void 0 : Project.model_3d) || Project.model_3d instanceof THREE.Bone) return;
                 let oldRoot = Project.model_3d, newRoot = new THREE.Bone;
@@ -109,527 +286,8 @@
                 }() : !1 === (0, util_1.isVertexWeightEnabledFor)(Project) && Project.skeleton);
             }
         },
-        /***/ 266: 
+        /***/ 224: 
         /***/ (__unused_webpack_module, exports) => {
-            "use strict";
-            Object.defineProperty(exports, "__esModule", {
-                value: !0
-            }), exports.isVertexWeightEnabledFor = function isVertexWeightEnabledFor(project) {
-                return null != (null == project ? void 0 : project.vertex_weights) && "disabled" !== project.vertex_weights;
-            }
-            /***/;
-        },
-        /***/ 314: 
-        /***/ module => {
-            "use strict";
-            /*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-*/            module.exports = function(cssWithMappingToString) {
-                var list = [];
-                // return the list of modules as css string
-                                return list.toString = function toString() {
-                    return this.map((function(item) {
-                        var content = "", needLayer = void 0 !== item[5];
-                        return item[4] && (content += "@supports (".concat(item[4], ") {")), item[2] && (content += "@media ".concat(item[2], " {")), 
-                        needLayer && (content += "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {")), 
-                        content += cssWithMappingToString(item), needLayer && (content += "}"), item[2] && (content += "}"), 
-                        item[4] && (content += "}"), content;
-                    })).join("");
-                }, 
-                // import a list of modules into the list
-                list.i = function i(modules, media, dedupe, supports, layer) {
-                    "string" == typeof modules && (modules = [ [ null, modules, void 0 ] ]);
-                    var alreadyImportedModules = {};
-                    if (dedupe) for (var k = 0; k < this.length; k++) {
-                        var id = this[k][0];
-                        null != id && (alreadyImportedModules[id] = !0);
-                    }
-                    for (var _k = 0; _k < modules.length; _k++) {
-                        var item = [].concat(modules[_k]);
-                        dedupe && alreadyImportedModules[item[0]] || (void 0 !== layer && (void 0 === item[5] || (item[1] = "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {").concat(item[1], "}")), 
-                        item[5] = layer), media && (item[2] ? (item[1] = "@media ".concat(item[2], " {").concat(item[1], "}"), 
-                        item[2] = media) : item[2] = media), supports && (item[4] ? (item[1] = "@supports (".concat(item[4], ") {").concat(item[1], "}"), 
-                        item[4] = supports) : item[4] = "".concat(supports)), list.push(item));
-                    }
-                }, list;
-            };
-        }
-        /***/ ,
-        /***/ 351: 
-        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-            "use strict";
-            Object.defineProperty(exports, "__esModule", {
-                value: !0
-            }), exports.loadBlenderIntegration = function loadBlenderIntegration() {
-                (0, defer_1.deferDelete)(new Action("joint_pain_blender_integration", {
-                    name: "Setup Blender animation integration...",
-                    icon: "rheumatology",
-                    category: "tools",
-                    click() {}
-                }));
-            }
-            /***/;
-            const defer_1 = __webpack_require__(40);
-        },
-        /***/ 361: 
-        /***/ function(__unused_webpack_module, exports, __webpack_require__) {
-            "use strict";
-            var __importDefault = this && this.__importDefault || function(mod) {
-                return mod && mod.__esModule ? mod : {
-                    default: mod
-                };
-            };
-            Object.defineProperty(exports, "__esModule", {
-                value: !0
-            }), exports.loadWeightsMode = function loadWeightsMode() {
-                (0, defer_1.deferDelete)(new Mode("weights", {
-                    name: "Weights",
-                    category: "navigate",
-                    condition: {
-                        formats: [ "free" ]
-                    },
-                    selectElements: !1,
-                    onSelect() {},
-                    onUnselect() {}
-                })), Panels.outliner.condition.modes.push("weights"), (0, defer_1.deferDelete)(new Panel("vertex-weights", {
-                    name: "Weights",
-                    icon: "rheumatology",
-                    condition: {
-                        formats: [ "free" ],
-                        modes: [ "weights" ]
-                    },
-                    default_position: {
-                        slot: "bottom",
-                        float_position: [ 100, 400 ],
-                        float_size: [ 600, 300 ],
-                        height: 260
-                    },
-                    component: WeightsPanel_vue_1.default
-                })), (0, defer_1.deferDelete)(new Panel("weights-preview", {
-                    icon: "movie",
-                    name: "Preview Animation",
-                    condition: {
-                        formats: [ "free" ],
-                        modes: [ "weights" ]
-                    },
-                    default_position: {
-                        slot: "left_bar",
-                        float_position: [ 0, 0 ],
-                        float_size: [ 300, 400 ],
-                        height: 400
-                    }
-                }));
-            };
-            const defer_1 = __webpack_require__(40), WeightsPanel_vue_1 = __importDefault(__webpack_require__(827));
-        },
-        /***/ 490: 
-        /***/ (module, __webpack_exports__, __webpack_require__) => {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__), 
-            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-                /* harmony export */ default: () => __WEBPACK_DEFAULT_EXPORT__
-                /* harmony export */            });
-            /* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(601), _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default =  __webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__), _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(314), ___CSS_LOADER_EXPORT___ =  __webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__)()(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default());
-            /* harmony import */            
-            // Module
-            ___CSS_LOADER_EXPORT___.push([ module.id, '\n.jp-weights-panel[data-v-49659108] {\n    overflow: scroll;\n    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);\n    background-position: -100px 0;\n}\n.jp-weights-panel .icon[data-v-49659108] {\n    vertical-align: text-top;\n}\n.jp-weights-table .jp-parent-indicator[data-v-49659108] {\n    font-weight: normal;\n    font-style: italic;\n    font-size: 0.9em;\n}\n.jp-weights-table .jp-parent-name[data-v-49659108] {\n    font-weight: bold;\n}\n.jp-weights-table .jp-group-header .jp-group-remove[data-v-49659108] {\n    opacity: 0;\n    cursor: pointer;\n}\n.jp-weights-table .jp-group-header:hover .jp-group-remove[data-v-49659108] {\n    background-color: var(--color-button);\n    opacity: 1;\n}\n.jp-weights-table .jp-group-header:hover .jp-group-remove[data-v-49659108]:hover {\n    background-color: var(--color-accent);\n    color: var(--color-accent_text);\n}\n.jp-weights-table .jp-vertex-row[data-v-49659108] {\n    height: 30px;\n}\n.jp-weights-table .jp-weight-vertex-cell[data-v-49659108] {\n    text-align: center;\n    width: calc(200px / 3);\n}\n.jp-weights-table .jp-weight-percentage-cell[data-v-49659108] {\n    width: 300px;\n}\n.jp-weights-table .jp-weight-percentage-cell input[data-v-49659108] {\n    text-align: right;\n}\n.jp-weights-table .jp-weight-percentage-cell.jp-has-influence[data-v-49659108] {\n    background-color: var(--group-color-dark);\n    color: var(--color-accent_text);\n}\n.jp-weights-table .jp-weight-percentage-cell.jp-no-influence[data-v-49659108] {\n    background-color: var(--color-dark);\n}\n.jp-corner[data-v-49659108] {\n    position: relative;\n}\n.jp-corner[data-v-49659108]::before {\n    content: "";\n    position: absolute;\n    pointer-events: none;\n    top: 0;\n    right: 0;\n    border-width: 4px;\n    border-style: solid;\n    border-color: var(--corner-color);\n    border-bottom-color: transparent !important;\n    border-left-color: transparent !important;\n}\n', "" ]);
-            // Exports
-            /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ___CSS_LOADER_EXPORT___;
-            /***/        },
-        /***/ 534: 
-        /***/ (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-            "use strict";
-            // EXPORTS
-                        // ./node_modules/vue-style-loader/lib/listToStyles.js
-            /**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-            function listToStyles(parentId, list) {
-                for (var styles = [], newStyles = {}, i = 0; i < list.length; i++) {
-                    var item = list[i], id = item[0], part = {
-                        id: parentId + ":" + i,
-                        css: item[1],
-                        media: item[2],
-                        sourceMap: item[3]
-                    };
-                    newStyles[id] ? newStyles[id].parts.push(part) : styles.push(newStyles[id] = {
-                        id,
-                        parts: [ part ]
-                    });
-                }
-                return styles;
-            }
-            __webpack_require__.d(__webpack_exports__, {
-                A: () => /* binding */ addStylesClient
-            });
-            // ./node_modules/vue-style-loader/lib/addStylesClient.js
-            /*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-            var hasDocument = "undefined" != typeof document;
-            if ("undefined" != typeof DEBUG && DEBUG && !hasDocument) throw new Error("vue-style-loader cannot be used in a non-browser environment. Use { target: 'node' } in your Webpack config to indicate a server-rendering environment.");
-            /*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/            var stylesInDom = {
-                /*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}, head = hasDocument && (document.head || document.getElementsByTagName("head")[0]), singletonElement = null, singletonCounter = 0, isProduction = !1, noop = function() {}, options = null, ssrIdKey = "data-vue-ssr-id", isOldIE = "undefined" != typeof navigator && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase());
-            function addStylesClient(parentId, list, _isProduction, _options) {
-                isProduction = _isProduction, options = _options || {};
-                var styles = listToStyles(parentId, list);
-                return addStylesToDom(styles), function update(newList) {
-                    for (var mayRemove = [], i = 0; i < styles.length; i++) {
-                        var item = styles[i];
-                        (domStyle = stylesInDom[item.id]).refs--, mayRemove.push(domStyle);
-                    }
-                    newList ? addStylesToDom(styles = listToStyles(parentId, newList)) : styles = [];
-                    for (i = 0; i < mayRemove.length; i++) {
-                        var domStyle;
-                        if (0 === (domStyle = mayRemove[i]).refs) {
-                            for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
-                            delete stylesInDom[domStyle.id];
-                        }
-                    }
-                };
-            }
-            function addStylesToDom(styles /* Array<StyleObject> */) {
-                for (var i = 0; i < styles.length; i++) {
-                    var item = styles[i], domStyle = stylesInDom[item.id];
-                    if (domStyle) {
-                        domStyle.refs++;
-                        for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j](item.parts[j]);
-                        for (;j < item.parts.length; j++) domStyle.parts.push(addStyle(item.parts[j]));
-                        domStyle.parts.length > item.parts.length && (domStyle.parts.length = item.parts.length);
-                    } else {
-                        var parts = [];
-                        for (j = 0; j < item.parts.length; j++) parts.push(addStyle(item.parts[j]));
-                        stylesInDom[item.id] = {
-                            id: item.id,
-                            refs: 1,
-                            parts
-                        };
-                    }
-                }
-            }
-            function createStyleElement() {
-                var styleElement = document.createElement("style");
-                return styleElement.type = "text/css", head.appendChild(styleElement), styleElement;
-            }
-            function addStyle(obj /* StyleObjectPart */) {
-                var update, remove, styleElement = document.querySelector("style[" + ssrIdKey + '~="' + obj.id + '"]');
-                if (styleElement) {
-                    if (isProduction) 
-                    // has SSR styles and in production mode.
-                    // simply do nothing.
-                    return noop;
-                    // has SSR styles but in dev mode.
-                    // for some reason Chrome can't handle source map in server-rendered
-                    // style tags - source maps in <style> only works if the style tag is
-                    // created and inserted dynamically. So we remove the server rendered
-                    // styles and inject new ones.
-                    styleElement.parentNode.removeChild(styleElement);
-                }
-                if (isOldIE) {
-                    // use singleton mode for IE9.
-                    var styleIndex = singletonCounter++;
-                    styleElement = singletonElement || (singletonElement = createStyleElement()), update = applyToSingletonTag.bind(null, styleElement, styleIndex, !1), 
-                    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, !0);
-                } else 
-                // use multi-style-tag mode in all other cases
-                styleElement = createStyleElement(), update = applyToTag.bind(null, styleElement), 
-                remove = function() {
-                    styleElement.parentNode.removeChild(styleElement);
-                };
-                return update(obj), function updateStyle(newObj /* StyleObjectPart */) {
-                    if (newObj) {
-                        if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap) return;
-                        update(obj = newObj);
-                    } else remove();
-                };
-            }
-            var textStore, replaceText = (textStore = [], function(index, replacement) {
-                return textStore[index] = replacement, textStore.filter(Boolean).join("\n");
-            });
-            function applyToSingletonTag(styleElement, index, remove, obj) {
-                var css = remove ? "" : obj.css;
-                if (styleElement.styleSheet) styleElement.styleSheet.cssText = replaceText(index, css); else {
-                    var cssNode = document.createTextNode(css), childNodes = styleElement.childNodes;
-                    childNodes[index] && styleElement.removeChild(childNodes[index]), childNodes.length ? styleElement.insertBefore(cssNode, childNodes[index]) : styleElement.appendChild(cssNode);
-                }
-            }
-            function applyToTag(styleElement, obj) {
-                var css = obj.css, media = obj.media, sourceMap = obj.sourceMap;
-                if (media && styleElement.setAttribute("media", media), options.ssrId && styleElement.setAttribute(ssrIdKey, obj.id), 
-                sourceMap && (
-                // https://developer.chrome.com/devtools/docs/javascript-debugging
-                // this makes source maps inside style tags work properly in Chrome
-                css += "\n/*# sourceURL=" + sourceMap.sources[0] + " */", 
-                // http://stackoverflow.com/a/26603875
-                css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */"), 
-                styleElement.styleSheet) styleElement.styleSheet.cssText = css; else {
-                    for (;styleElement.firstChild; ) styleElement.removeChild(styleElement.firstChild);
-                    styleElement.appendChild(document.createTextNode(css));
-                }
-            }
-            /***/        },
-        /***/ 585: 
-        /***/ module => {
-            "use strict";
-            module.exports = "// Vertex shader that will replace the one used on textures\r\n// Based on texture.js @ 64\r\n// Edited to add skinning\r\n// Also changed the antialising bleed fix to an ifdef\r\n// Note that we use MAX_BONES_JP instead of THREE.js's normal MAX_BONES\r\n// because it's forcefully inserting a stupid value like 1024\r\n// and we can't change that.\r\n\r\nattribute float highlight;\r\n\r\nuniform bool SHADE;\r\nuniform int LIGHTSIDE;\r\n\r\n#ifdef USE_SKINNING\r\nuniform mat4 boneMatrices[ MAX_BONES_JP ];\r\n#endif\r\n\r\n#ifdef ANTIALIAS_BLEED_FIX\r\ncentroid varying vec2 vUv;\r\n#else\r\nvarying vec2 vUv;\r\n#endif\r\n\r\nvarying float light;\r\nvarying float lift;\r\n\r\nfloat AMBIENT = 0.5;\r\nfloat XFAC = -0.15;\r\nfloat ZFAC = 0.05;\r\n\r\nvoid main()\r\n{\r\n    mat4 skinnedModelViewMatrix = modelViewMatrix;\r\n\r\n#ifdef USE_SKINNING\r\n    skinnedModelViewMatrix = viewMatrix * (\r\n        skinWeight.x * boneMatrices[int(skinIndex.x)] +\r\n        skinWeight.y * boneMatrices[int(skinIndex.y)] +\r\n        skinWeight.z * boneMatrices[int(skinIndex.z)] +\r\n        skinWeight.w * boneMatrices[int(skinIndex.w)] );\r\n#endif\r\n\r\n    if (SHADE) {\r\n\r\n        vec3 N = normalize( mat3(skinnedModelViewMatrix) * normal );\r\n\r\n        if (LIGHTSIDE == 1) {\r\n            float temp = N.y;\r\n            N.y = N.z * -1.0;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 2) {\r\n            float temp = N.y;\r\n            N.y = N.x;\r\n            N.x = temp;\r\n        }\r\n        if (LIGHTSIDE == 3) {\r\n            N.y = N.y * -1.0;\r\n        }\r\n        if (LIGHTSIDE == 4) {\r\n            float temp = N.y;\r\n            N.y = N.z;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 5) {\r\n            float temp = N.y;\r\n            N.y = N.x * -1.0;\r\n            N.x = temp;\r\n        }\r\n\r\n        float yLight = (1.0+N.y) * 0.5;\r\n        light = yLight * (1.0-AMBIENT) + N.x*N.x * XFAC + N.z*N.z * ZFAC + AMBIENT;\r\n\r\n    } else {\r\n\r\n        light = 1.0;\r\n\r\n    }\r\n\r\n    if (highlight == 2.0) {\r\n        lift = 0.22;\r\n    } else if (highlight == 1.0) {\r\n        lift = 0.1;\r\n    } else {\r\n        lift = 0.0;\r\n    }\r\n    \r\n    vUv = uv;\r\n    vec4 mvPosition = skinnedModelViewMatrix * vec4( position, 1.0 );\r\n    gl_Position = projectionMatrix * mvPosition;\r\n}\r\n";
-        }
-        /***/ ,
-        /***/ 601: 
-        /***/ module => {
-            "use strict";
-            module.exports = function(i) {
-                return i[1];
-            };
-        }
-        /***/ ,
-        /***/ 740: 
-        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-            "use strict";
-            Object.defineProperty(exports, "__esModule", {
-                value: !0
-            }), exports.replaceMethod = function replaceMethod(target, key, newMethod) {
-                let methodOwner;
-                if ("function" == typeof target && "prototype" in target) {
-                    const targetAsConstructor = target;
-                    methodOwner = key in targetAsConstructor.prototype ? targetAsConstructor.prototype : targetAsConstructor;
-                } else methodOwner = target;
-                const oldMethod = methodOwner[key];
-                if ("function" != typeof oldMethod) throw new Error(`Method ${String(key)} is not a function`);
-                methodOwner[key] = function(...args) {
-                    return newMethod.apply(this, [ (...bargs) => oldMethod.apply(this, bargs), ...args ]);
-                }, (0, defer_1.defer)((() => {
-                    methodOwner[key] = oldMethod;
-                }));
-            }
-            /***/;
-            const defer_1 = __webpack_require__(40);
-        },
-        /***/ 746: 
-        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-            "use strict";
-            Object.defineProperty(exports, "__esModule", {
-                value: !0
-            }), exports.loadGltfExport = function loadGltfExport() {
-                Codecs.gltf.export_options.jp_vertex_weights = {
-                    type: "checkbox",
-                    label: "Joint Pain: Export Vertex Weights (if available)",
-                    value: !0
-                }, (0, defer_1.defer)((() => delete Codecs.gltf.export_options.jp_vertex_weights)), 
-                (0, replace_method_1.replaceMethod)(Codecs.gltf, "compile", (async function(original, options) {
-                    if (!0 !== options.jp_vertex_weights || "one" !== Project.vertex_weights && "four" !== Project.vertex_weights) return await original(options);
-                    options.jp_vertex_weights && (options.armature = !0);
-                    let result = await original(options);
-                    return "ascii" === options.encoding || options.encoding, result;
-                }));
-            }
-            /***/;
-            const defer_1 = __webpack_require__(40), replace_method_1 = __webpack_require__(740);
-        },
-        /***/ 827: 
-        /***/ (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-            "use strict";
-            // ESM COMPAT FLAG
-                        __webpack_require__.r(__webpack_exports__), 
-            // EXPORTS
-            __webpack_require__.d(__webpack_exports__, {
-                __esModule: () => /* reexport */ WeightsPanelvue_type_script_lang_ts /* __esModule */ .B,
-                default: () => /* binding */ WeightsPanel
-            });
-            // ./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./plugin/WeightsPanel.vue?vue&type=template&id=49659108&scoped=true
-            var render = function render() {
-                var _vm = this, _c = _vm._self._c;
-                return _c("div", {
-                    staticClass: "jp-weights-panel"
-                }, [ _c("table", {
-                    staticClass: "jp-weights-table"
-                }, [ _c("tr", [ _c("th", {
-                    staticStyle: {
-                        "font-weight": "normal"
-                    },
-                    attrs: {
-                        colspan: "3"
-                    }
-                }, [ _c("i", {
-                    staticClass: "fa_big icon far fa-gem"
-                }), _vm._v(" "), _c("span", {
-                    style: {
-                        background: _vm.mesh.backgroundGradient,
-                        "border-radius": "5px",
-                        color: "#cacad4",
-                        "text-shadow": "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000",
-                        padding: "2px 10px",
-                        "font-weight": "bold",
-                        "font-size": "1.1em"
-                    }
-                }, [ _vm._v("\n                    " + _vm._s(_vm.mesh.name) + "\n                ") ]) ]), _vm._v(" "), _vm._l(_vm.mesh.groups, (function(group, groupIndex) {
-                    return _c("th", {
-                        key: groupIndex,
-                        staticClass: "jp-group-header"
-                    }, [ _c("span", 0 === groupIndex ? [ _c("span", {
-                        staticClass: "jp-parent-indicator"
-                    }, [ _vm._v("parent group") ]), _vm._v(" "), _c("br"), _vm._v(" "), _c("i", {
-                        staticClass: "material-icons notranslate icon",
-                        style: {
-                            color: group.color
-                        }
-                    }, [ _vm._v("folder") ]), _vm._v(" "), _c("span", {
-                        staticClass: "jp-parent-name"
-                    }, [ _vm._v(_vm._s(group.name)) ]) ] : [ _c("br"), _vm._v(" "), _c("i", {
-                        staticClass: "material-icons notranslate icon",
-                        style: {
-                            color: group.color
-                        }
-                    }, [ _vm._v("folder") ]), _vm._v(" "), _c("input", {
-                        attrs: {
-                            type: "text"
-                        },
-                        domProps: {
-                            value: group.name
-                        },
-                        on: {
-                            focus: function($event) {}
-                        }
-                    }), _vm._v(" "), _c("i", {
-                        staticClass: "jp-group-remove material-icons notranslate icon"
-                    }, [ _vm._v("close") ]) ]) ]);
-                })), _vm._v(" "), _vm._m(0) ], 2), _vm._v(" "), _vm._l(_vm.mesh.vertices, (function(vertex) {
-                    return _c("tr", {
-                        key: vertex.id,
-                        staticClass: "jp-vertex-row"
-                    }, [ _c("td", {
-                        staticClass: "jp-weight-vertex-cell jp-corner",
-                        staticStyle: {
-                            "--corner-color": "var(--color-axis-x)"
-                        }
-                    }, [ _vm._v("\n                " + _vm._s(vertex.pos[0]) + "\n            ") ]), _vm._v(" "), _c("td", {
-                        staticClass: "jp-weight-vertex-cell jp-corner",
-                        staticStyle: {
-                            "--corner-color": "var(--color-axis-y)"
-                        }
-                    }, [ _vm._v("\n                " + _vm._s(vertex.pos[1]) + "\n            ") ]), _vm._v(" "), _c("td", {
-                        staticClass: "jp-weight-vertex-cell jp-corner",
-                        staticStyle: {
-                            "--corner-color": "var(--color-axis-z)"
-                        }
-                    }, [ _vm._v("\n                " + _vm._s(vertex.pos[2]) + "\n            ") ]), _vm._v(" "), _vm._l(vertex.weights, (function(weight, groupIndex) {
-                        return _c("td", {
-                            key: groupIndex,
-                            staticClass: "jp-weight-percentage-cell",
-                            class: {
-                                "jp-has-influence": weight > 0,
-                                "jp-no-influence": 0 === weight
-                            },
-                            style: {
-                                "--group-color-dark": _vm.mesh.groups[groupIndex].dark
-                            }
-                        }, [ "one" === _vm.projectVertexWeightSetting ? _c("div", [ _c("input", {
-                            attrs: {
-                                type: "radio"
-                            },
-                            domProps: {
-                                checked: weight > 0
-                            }
-                        }) ]) : _c("div", [ _vm._v("\n                    " + _vm._s(100 * weight) + "%\n                ") ]) ]);
-                    })) ], 2);
-                })) ], 2) ]);
-            };
-            render._withStripped = !0;
-            // ./plugin/WeightsPanel.vue?vue&type=template&id=49659108&scoped=true
-            // EXTERNAL MODULE: ./node_modules/ts-loader/index.js??clonedRuleSet-1!./node_modules/vue-loader/lib/index.js??vue-loader-options!./plugin/WeightsPanel.vue?vue&type=script&lang=ts
-            var WeightsPanelvue_type_script_lang_ts = __webpack_require__(913);
-            // ./plugin/WeightsPanel.vue?vue&type=script&lang=ts
-            /* harmony default export */ const plugin_WeightsPanelvue_type_script_lang_ts = WeightsPanelvue_type_script_lang_ts /* default */ .A;
-            // EXTERNAL MODULE: ./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./plugin/WeightsPanel.vue?vue&type=style&index=0&id=49659108&prod&scoped=true&lang=css
-                        __webpack_require__(963);
-            /* normalize component */
-            var component = // ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-            /* globals __VUE_SSR_CONTEXT__ */
-            // IMPORTANT: Do NOT use ES2015 features in this file (except for modules).
-            // This module is a runtime utility for cleaner component module output and will
-            // be included in the final webpack user bundle.
-            function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier /* server only */ , shadowMode /* vue-cli only */) {
-                // Vue.extend constructor export interop
-                var hook, options = "function" == typeof scriptExports ? scriptExports.options : scriptExports;
-                // render functions
-                                if (render && (options.render = render, options.staticRenderFns = staticRenderFns, 
-                options._compiled = !0), 
-                // functional template
-                functionalTemplate && (options.functional = !0), 
-                // scopedId
-                scopeId && (options._scopeId = "data-v-" + scopeId), moduleIdentifier ? (
-                // server build
-                hook = function(context) {
-                    // 2.3 injection
-                    // functional
-                    // 2.2 with runInNewContext: true
-                    (context = context || // cached call
-                    this.$vnode && this.$vnode.ssrContext || // stateful
-                    this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (context = __VUE_SSR_CONTEXT__), 
-                    // inject component styles
-                    injectStyles && injectStyles.call(this, context), 
-                    // register component module identifier for async chunk inferrence
-                    context && context._registeredComponents && context._registeredComponents.add(moduleIdentifier);
-                }
-                // used by ssr in case component is cached and beforeCreate
-                // never gets called
-                , options._ssrRegister = hook) : injectStyles && (hook = shadowMode ? function() {
-                    injectStyles.call(this, (options.functional ? this.parent : this).$root.$options.shadowRoot);
-                } : injectStyles), hook) if (options.functional) {
-                    // for template-only hot-reload because in that case the render fn doesn't
-                    // go through the normalizer
-                    options._injectStyles = hook;
-                    // register for functional component in vue file
-                                        var originalRender = options.render;
-                    options.render = function renderWithStyleInjection(h, context) {
-                        return hook.call(context), originalRender(h, context);
-                    };
-                } else {
-                    // inject component registration as beforeCreate hook
-                    var existing = options.beforeCreate;
-                    options.beforeCreate = existing ? [].concat(existing, hook) : [ hook ];
-                }
-                return {
-                    exports: scriptExports,
-                    options
-                };
-            }(plugin_WeightsPanelvue_type_script_lang_ts, render, [ function() {
-                var _c = this._self._c;
-                return _c("th", [ _c("br"), this._v(" "), _c("i", {
-                    staticClass: "material-icons notranslate icon"
-                }, [ this._v("add") ]), this._v(" "), _c("input", {
-                    attrs: {
-                        type: "text",
-                        placeholder: "Add Group..."
-                    }
-                }) ]);
-            } ], !1, null, "49659108", null)
-            /* harmony default export */;
-            const WeightsPanel = component.exports;
-            /***/        },
-        /***/ 913: 
-        /***/ (__unused_webpack_module, exports) => {
-            "use strict";
             Object.defineProperty(exports, "B", {
                 value: !0
             }), exports.A = {
@@ -710,18 +368,175 @@ type StyleObjectPart = {
             };
         }
         /***/ ,
-        /***/ 963: 
-        /***/ (module, __unused_webpack_exports, __webpack_require__) => {
-            // style-loader: Adds some css to the DOM by adding a <style> tag
-            // load the styles
-            var content = __webpack_require__(490);
-            content.__esModule && (content = content.default), "string" == typeof content && (content = [ [ module.id, content, "" ] ]), 
-            content.locals && (module.exports = content.locals);
-            // add the styles to the DOM
-            (0, __webpack_require__(534) /* ["default"] */ .A)("506f3fdc", content, !1, {});
-        }
-        /***/
-        /******/    }, __webpack_module_cache__ = {};
+        /***/ 266: 
+        /***/ (__unused_webpack_module, exports) => {
+            Object.defineProperty(exports, "__esModule", {
+                value: !0
+            }), exports.isVertexWeightEnabledFor = function isVertexWeightEnabledFor(project) {
+                return null != (null == project ? void 0 : project.jp_vertex_weights) && "disabled" !== project.jp_vertex_weights;
+            }
+            /***/;
+        },
+        /***/ 351: 
+        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+            Object.defineProperty(exports, "__esModule", {
+                value: !0
+            }), exports.loadBlenderIntegration = function loadBlenderIntegration() {
+                (0, defer_1.deferDelete)(new Action("joint_pain_blender_integration", {
+                    name: "Setup Blender animation integration...",
+                    icon: "rheumatology",
+                    category: "tools",
+                    click() {}
+                }));
+            }
+            /***/;
+            const defer_1 = __webpack_require__(40);
+        },
+        /***/ 361: 
+        /***/ function(__unused_webpack_module, exports, __webpack_require__) {
+            var __importDefault = this && this.__importDefault || function(mod) {
+                return mod && mod.__esModule ? mod : {
+                    default: mod
+                };
+            };
+            Object.defineProperty(exports, "__esModule", {
+                value: !0
+            }), exports.loadWeightsMode = function loadWeightsMode() {
+                (0, defer_1.deferRemoveStyle)(weights_panel_css_1.default), (0, defer_1.deferDelete)(new Mode("weights", {
+                    name: "Weights",
+                    category: "navigate",
+                    condition: {
+                        formats: [ "free" ]
+                    },
+                    selectElements: !1,
+                    onSelect() {
+                        var _a;
+                        Interface.addSuggestedModifierKey("shift", "Reveal texture"), null === (_a = document.querySelector(".preview_view_mode_menu")) || void 0 === _a || _a.classList.add("jp-hidden");
+                    },
+                    onUnselect() {
+                        var _a;
+                        Interface.removeSuggestedModifierKey("shift", "Reveal texture"), null === (_a = document.querySelector(".preview_view_mode_menu")) || void 0 === _a || _a.classList.remove("jp-hidden");
+                    }
+                })), Panels.outliner.condition.modes.push("weights"), (0, defer_1.deferDelete)(new Panel("vertex-weights", {
+                    name: "Weights",
+                    icon: "rheumatology",
+                    condition: {
+                        formats: [ "free" ],
+                        modes: [ "weights" ]
+                    },
+                    default_position: {
+                        slot: "bottom",
+                        float_position: [ 100, 400 ],
+                        float_size: [ 600, 300 ],
+                        height: 260
+                    },
+                    component: WeightsPanel_vue_1.default
+                })), (0, defer_1.deferDelete)(new Panel("weights-preview", {
+                    icon: "movie",
+                    name: "Preview Animation",
+                    condition: {
+                        formats: [ "free" ],
+                        modes: [ "weights" ]
+                    },
+                    default_position: {
+                        slot: "left_bar",
+                        float_position: [ 0, 0 ],
+                        float_size: [ 300, 400 ],
+                        height: 400
+                    }
+                }));
+            };
+            const defer_1 = __webpack_require__(40), WeightsPanel_vue_1 = __importDefault(__webpack_require__(43)), weights_panel_css_1 = __importDefault(__webpack_require__(868));
+        },
+        /***/ 740: 
+        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+            Object.defineProperty(exports, "__esModule", {
+                value: !0
+            }), exports.replaceMethod = function replaceMethod(target, key, newMethod) {
+                let methodOwner;
+                if ("function" == typeof target && "prototype" in target) {
+                    const targetAsConstructor = target;
+                    methodOwner = key in targetAsConstructor.prototype ? targetAsConstructor.prototype : targetAsConstructor;
+                } else methodOwner = target;
+                const oldMethod = methodOwner[key];
+                if ("function" != typeof oldMethod) throw new Error(`Method ${String(key)} is not a function`);
+                methodOwner[key] = function(...args) {
+                    return newMethod.apply(this, [ (...bargs) => oldMethod.apply(this, bargs), ...args ]);
+                }, (0, defer_1.defer)((() => {
+                    methodOwner[key] = oldMethod;
+                }));
+            }
+            /***/;
+            const defer_1 = __webpack_require__(40);
+        },
+        /***/ 746: 
+        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+            Object.defineProperty(exports, "__esModule", {
+                value: !0
+            }), exports.loadGltfExport = function loadGltfExport() {
+                Codecs.gltf.export_options.jp_vertex_weights = {
+                    type: "checkbox",
+                    label: "Joint Pain: Export Vertex Weights (if available)",
+                    value: !0
+                }, (0, defer_1.defer)((() => delete Codecs.gltf.export_options.jp_vertex_weights)), 
+                (0, replace_method_1.replaceMethod)(Codecs.gltf, "compile", (async function(original, options) {
+                    if (!0 !== options.jp_vertex_weights || "one" !== Project.jp_vertex_weights && "four" !== Project.jp_vertex_weights) return await original(options);
+                    options.jp_vertex_weights && (options.armature = !0);
+                    let result = await original(options);
+                    return "ascii" === options.encoding || options.encoding, result;
+                }));
+            }
+            /***/;
+            const defer_1 = __webpack_require__(40), replace_method_1 = __webpack_require__(740);
+        },
+        /***/ 868: 
+        /***/ module => {
+            module.exports = '\r\n.jp-weights-panel {\r\n    overflow: scroll;\r\n    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);\r\n    /* Move left because first column is 200px instead of 300px */\r\n    background-position: -100px 0;\r\n}\r\n\r\n.jp-weights-panel .icon {\r\n    vertical-align: text-top;\r\n}\r\n\r\n.jp-weights-table {\r\n    border-spacing: 0;\r\n}\r\n\r\n.jp-weights-table .jp-parent-indicator {\r\n    font-weight: normal;\r\n    font-style: italic;\r\n    font-size: 0.9em;\r\n}\r\n\r\n.jp-weights-table .jp-parent-name {\r\n    font-weight: bold;\r\n}\r\n\r\n.jp-weights-table .jp-group-header .jp-group-remove {\r\n    opacity: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove {\r\n    background-color: var(--color-button);\r\n    opacity: 1;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove:hover {\r\n    background-color: var(--color-accent);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-vertex-row {\r\n    height: 30px;\r\n}\r\n\r\n.jp-weights-table td,\r\n.jp-weights-table th {\r\n    min-width: 300px;\r\n    max-width: 300px;\r\n}\r\n\r\n.jp-weights-table td:first-child,\r\n.jp-weights-table th:first-child {\r\n    min-width: 200px;\r\n    max-width: 200px;\r\n}\r\n\r\n.jp-weights-table .jp-weight-vertex-cell {\r\n    text-align: center;\r\n    /* width: calc(200px / 3); */\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell input {\r\n    text-align: right;\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-has-influence {\r\n    background-color: var(--group-color-dark);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-no-influence {\r\n    /* background-color: var(--color-dark); */\r\n}\r\n\r\n.jp-weights-table .jp-vertex-component {\r\n    width: 33.3%;\r\n}\r\n\r\n.jp-corner {\r\n    position: relative;\r\n}\r\n\r\n.jp-corner::before {\r\n    content: "";\r\n    position: absolute;\r\n    pointer-events: none;\r\n    top: 0;\r\n    right: 0;\r\n    border-width: 4px;\r\n    border-style: solid;\r\n    border-color: var(--corner-color);\r\n    border-bottom-color: transparent !important;\r\n    border-left-color: transparent !important;\r\n}\r\n\r\n.jp-corner-x {\r\n    --corner-color: var(--color-axis-x);\r\n}\r\n\r\n.jp-corner-y {\r\n    --corner-color: var(--color-axis-y);\r\n}\r\n\r\n.jp-corner-z {\r\n    --corner-color: var(--color-axis-z);\r\n}';
+            /***/        },
+        /***/ 941: 
+        /***/ function(__unused_webpack_module, exports, __webpack_require__) {
+            var __importDefault = this && this.__importDefault || function(mod) {
+                return mod && mod.__esModule ? mod : {
+                    default: mod
+                };
+            };
+            Object.defineProperty(exports, "__esModule", {
+                value: !0
+            });
+            const defer_1 = __webpack_require__(40), skinned_mesh_preview_1 = __webpack_require__(193), gltf_import_1 = __webpack_require__(93), gltf_export_1 = __webpack_require__(746), weights_mode_1 = __webpack_require__(361), blender_integration_1 = __webpack_require__(351), styles_css_1 = __importDefault(__webpack_require__(950));
+            BBPlugin.register("joint_pain", {
+                title: "Joint Pain",
+                author: "0x13F",
+                description: "Add vertex weights to your model, akin to skeletal animation",
+                icon: "rheumatology",
+                version: "1.0.0",
+                variant: "both",
+                tags: [ "Format: Generic Model", "Animation", "Exporter" ],
+                onload() {
+                    (0, defer_1.deferDelete)(new Property(ModelProject, "enum", "jp_vertex_weights", {
+                        label: "Joint Pain: Vertex Weights",
+                        description: 'Vertex Weights mode for the project. The number of weights per vertex determines how many different bones can have greater than zero influence on any given vertex. "Four" is common for modern styles and is the max amount supported. It offers the most freedom but may be harder to work with. "One" used to be the standard with early 3D graphics. It can be easier to work with and may help achieve a more authentic retro style. ',
+                        default: "disabled",
+                        options: {
+                            disabled: "Disabled",
+                            one: "1 Weight per Vertex (Retro)",
+                            four: "4 Weights per Vertex (Modern)"
+                        }
+                    })), (0, defer_1.deferRemoveStyle)(styles_css_1.default), (0, weights_mode_1.loadWeightsMode)(), 
+                    (0, skinned_mesh_preview_1.loadSkinnedMeshPreview)(), (0, gltf_import_1.loadGltfImport)(), 
+                    (0, gltf_export_1.loadGltfExport)(), (0, blender_integration_1.loadBlenderIntegration)();
+                },
+                onunload() {
+                    (0, defer_1.runDeferred)();
+                }
+            });
+        },
+        /***/ 950: 
+        /***/ module => {
+            module.exports = ".jp-hidden {\r\n    display: none !important;\r\n}\r\n";
+            /***/
+            /******/        }
+    }, __webpack_module_cache__ = {};
     /************************************************************************/
     /******/ // The module cache
     /******/    
@@ -735,7 +550,7 @@ type StyleObjectPart = {
         /******/
         /******/ // Create a new module (and put it into the cache)
         /******/        var module = __webpack_module_cache__[moduleId] = {
-            /******/ id: moduleId,
+            /******/ // no module.id needed
             /******/ // no module.loaded needed
             /******/ exports: {}
             /******/        };
@@ -749,18 +564,8 @@ type StyleObjectPart = {
         /******/    }
     /******/
     /************************************************************************/
-    /******/ /* webpack/runtime/compat get default export */
+    /******/ /* webpack/runtime/define property getters */
     /******/    
-    /******/ // getDefaultExport function for compatibility with non-harmony modules
-    /******/ __webpack_require__.n = module => {
-        /******/ var getter = module && module.__esModule ? 
-        /******/ () => module.default
-        /******/ : () => module
-        /******/;
-        /******/ return __webpack_require__.d(getter, {
-            a: getter
-        }), getter;
-        /******/    }, 
     /******/ // define getter functions for harmony exports
     /******/ __webpack_require__.d = (exports, definition) => {
         /******/ for (var key in definition) 
@@ -784,34 +589,12 @@ type StyleObjectPart = {
         });
     }
     /******/;
-    // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
-    (() => {
-        "use strict";
-        const defer_1 = __webpack_require__(40), skinned_mesh_preview_1 = __webpack_require__(193), gltf_import_1 = __webpack_require__(93), gltf_export_1 = __webpack_require__(746), weights_mode_1 = __webpack_require__(361), blender_integration_1 = __webpack_require__(351);
-        BBPlugin.register("joint_pain", {
-            title: "Joint Pain",
-            author: "0x13F",
-            description: "Add vertex weights to your model, akin to skeletal animation",
-            icon: "rheumatology",
-            version: "0.0.1",
-            variant: "both",
-            tags: [ "Format: Generic Model", "Animation", "Exporter" ],
-            onload() {
-                (0, defer_1.deferDelete)(new Property(ModelProject, "enum", "vertex_weights", {
-                    label: "Joint Pain: Vertex Weights",
-                    default: "disabled",
-                    options: {
-                        disabled: "Disabled",
-                        one: "1 Weight per Vertex (Retro)",
-                        four: "4 Weights per Vertex (Modern)"
-                    }
-                })), (0, weights_mode_1.loadWeightsMode)(), (0, skinned_mesh_preview_1.loadSkinnedMeshPreview)(), 
-                (0, gltf_import_1.loadGltfImport)(), (0, gltf_export_1.loadGltfExport)(), (0, blender_integration_1.loadBlenderIntegration)();
-            },
-            onunload() {
-                (0, defer_1.runDeferred)();
-            }
-        });
-    })();
-})
-/******/ ();
+    /******/
+    /************************************************************************/
+    /******/
+    /******/ // startup
+    /******/ // Load entry module and return exports
+    /******/ // This entry module is referenced by other modules so it can't be inlined
+    /******/ __webpack_require__(941);
+    /******/
+    /******/})();

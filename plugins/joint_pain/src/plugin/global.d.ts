@@ -32,6 +32,11 @@ declare global {
         export default value;
     }
 
+    declare module '*.css' {
+        const value: string;
+        export default value;
+    }
+
     //////////////////////////////////////////////////////////
     // Missing types
     //////////////////////////////////////////////////////////
@@ -42,13 +47,17 @@ declare global {
         nodes_3d: Record<string, THREE.Object3D>,
     }>;
 
+    interface PropertyOptions {
+        description?: string,
+    }
+
     //////////////////////////////////////////////////////////
     // Additions from this plugin
     //////////////////////////////////////////////////////////
 
     interface ModelProject {
         skeleton: THREE.Skeleton|undefined;
-        vertex_weights: 'disabled'|'one'|'four'|undefined;
+        jp_vertex_weights: 'disabled'|'one'|'four'|undefined;
     }
 
 }

@@ -1,7 +1,7 @@
 import { deferDelete } from './defer';
 import { replaceMethod } from './replace-method';
 import { isVertexWeightEnabledFor } from './util';
-import skinnedVertexShader from './skinnedVertexShader.glsl';
+import skinnedVertexShader from './shaders/skinnedVertexShader.glsl';
 
 // This file is responsible for showing vertex weights in the 3D preview
 // We achieve this by replacing preview nodes and texture materials

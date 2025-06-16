@@ -26,14 +26,11 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     optimizeSSR: false
-                }
+                },
             },
             {
                 test: /\.css$/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader',
-                ],
+                type: 'asset/source',
             },
             {
                 test: /\.glsl$/,

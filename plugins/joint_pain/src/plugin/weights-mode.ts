@@ -1,5 +1,6 @@
-import { defer, deferDelete } from './defer';
-import WeightsPanel from './WeightsPanel.vue';
+import { deferDelete, deferRemoveStyle } from './defer';
+import WeightsPanel from './components/WeightsPanel.vue';
+import weightsPanelStyles from './components/weights-panel.css'
 
 export function loadWeightsMode() {
 
@@ -12,6 +13,8 @@ export function loadWeightsMode() {
     // TODO: in group dropdown, sort groups by distance to the mesh's group's pivot
     // TODO: have animation move bones instead of groups (same thing?)
 
+    deferRemoveStyle(weightsPanelStyles);
+
     deferDelete(new Mode('weights', {
         name: 'Weights',
         category: 'navigate',
@@ -20,10 +23,13 @@ export function loadWeightsMode() {
         },
         selectElements: false,
         onSelect() {
+            Interface.addSuggestedModifierKey('shift', 'Reveal texture');
+            document.querySelector('.preview_view_mode_menu')?.classList.add('jp-hidden');
 
         },
         onUnselect() {
-
+            Interface.removeSuggestedModifierKey('shift', 'Reveal texture');
+            document.querySelector('.preview_view_mode_menu')?.classList.remove('jp-hidden');
         },
     }));
     // This feels wrong but ok

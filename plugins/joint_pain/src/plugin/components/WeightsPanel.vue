@@ -2,7 +2,7 @@
     <div class="jp-weights-panel">
         <table class="jp-weights-table">
             <tr>
-                <th colspan="3" style="font-weight: normal">
+                <th style="font-weight: normal">
                     <i class="fa_big icon far fa-gem"></i>
                     <span :style="{
                         'background':    mesh.backgroundGradient,
@@ -37,14 +37,10 @@
                 </th>
             </tr>
             <tr v-for="vertex in mesh.vertices" :key="vertex.id" class="jp-vertex-row">
-                <td class="jp-weight-vertex-cell jp-corner" style="--corner-color: var(--color-axis-x)">
-                    {{ vertex.pos[0] }}
-                </td>
-                <td class="jp-weight-vertex-cell jp-corner" style="--corner-color: var(--color-axis-y)">
-                    {{ vertex.pos[1] }}
-                </td>
-                <td class="jp-weight-vertex-cell jp-corner" style="--corner-color: var(--color-axis-z)">
-                    {{ vertex.pos[2] }}
+                <td class="jp-weight-vertex-cell">
+                    <div class="jp-vertex-component jp-corner jp-corner-x">{{ vertex.pos[0] }}</div>
+                    <div class="jp-vertex-component jp-corner jp-corner-y">{{ vertex.pos[1] }}</div>
+                    <div class="jp-vertex-component jp-corner jp-corner-z">{{ vertex.pos[2] }}</div>
                 </td>
                 <td v-for="(weight, groupIndex) in vertex.weights" :key="groupIndex" class="jp-weight-percentage-cell"
                     :class="{ 'jp-has-influence': weight > 0, 'jp-no-influence': weight === 0 }"
@@ -97,83 +93,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.jp-weights-panel {
-    overflow: scroll;
-    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);
-    background-position: -100px 0;
-}
-
-.jp-weights-panel .icon {
-    vertical-align: text-top;
-}
-
-.jp-weights-table .jp-parent-indicator {
-    font-weight: normal;
-    font-style: italic;
-    font-size: 0.9em;
-}
-
-.jp-weights-table .jp-parent-name {
-    font-weight: bold;
-}
-
-.jp-weights-table .jp-group-header .jp-group-remove {
-    opacity: 0;
-    cursor: pointer;
-}
-
-.jp-weights-table .jp-group-header:hover .jp-group-remove {
-    background-color: var(--color-button);
-    opacity: 1;
-}
-
-.jp-weights-table .jp-group-header:hover .jp-group-remove:hover {
-    background-color: var(--color-accent);
-    color: var(--color-accent_text);
-}
-
-.jp-weights-table .jp-vertex-row {
-    height: 30px;
-}
-
-.jp-weights-table .jp-weight-vertex-cell {
-    text-align: center;
-    width: calc(200px / 3);
-}
-
-.jp-weights-table .jp-weight-percentage-cell {
-    width: 300px;
-}
-
-.jp-weights-table .jp-weight-percentage-cell input {
-    text-align: right;
-}
-
-.jp-weights-table .jp-weight-percentage-cell.jp-has-influence {
-    background-color: var(--group-color-dark);
-    color: var(--color-accent_text);
-}
-
-.jp-weights-table .jp-weight-percentage-cell.jp-no-influence {
-    background-color: var(--color-dark);
-}
-
-.jp-corner {
-    position: relative;
-}
-
-.jp-corner::before {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-    top: 0;
-    right: 0;
-    border-width: 4px;
-    border-style: solid;
-    border-color: var(--corner-color);
-    border-bottom-color: transparent !important;
-    border-left-color: transparent !important;
-}
-</style>

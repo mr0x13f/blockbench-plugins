@@ -1,0 +1,107 @@
+
+.jp-weights-panel {
+    overflow: scroll;
+    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);
+    /* Move left because first column is 200px instead of 300px */
+    background-position: -100px 0;
+}
+
+.jp-weights-panel .icon {
+    vertical-align: text-top;
+}
+
+.jp-weights-table {
+    border-spacing: 0;
+}
+
+.jp-weights-table .jp-parent-indicator {
+    font-weight: normal;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+.jp-weights-table .jp-parent-name {
+    font-weight: bold;
+}
+
+.jp-weights-table .jp-group-header .jp-group-remove {
+    opacity: 0;
+    cursor: pointer;
+}
+
+.jp-weights-table .jp-group-header:hover .jp-group-remove {
+    background-color: var(--color-button);
+    opacity: 1;
+}
+
+.jp-weights-table .jp-group-header:hover .jp-group-remove:hover {
+    background-color: var(--color-accent);
+    color: var(--color-accent_text);
+}
+
+.jp-weights-table .jp-vertex-row {
+    height: 30px;
+}
+
+.jp-weights-table td,
+.jp-weights-table th {
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.jp-weights-table td:first-child,
+.jp-weights-table th:first-child {
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.jp-weights-table .jp-weight-vertex-cell {
+    text-align: center;
+    /* width: calc(200px / 3); */
+}
+
+.jp-weights-table .jp-weight-percentage-cell input {
+    text-align: right;
+}
+
+.jp-weights-table .jp-weight-percentage-cell.jp-has-influence {
+    background-color: var(--group-color-dark);
+    color: var(--color-accent_text);
+}
+
+.jp-weights-table .jp-weight-percentage-cell.jp-no-influence {
+    /* background-color: var(--color-dark); */
+}
+
+.jp-weights-table .jp-vertex-component {
+    width: 33.3%;
+}
+
+.jp-corner {
+    position: relative;
+}
+
+.jp-corner::before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    right: 0;
+    border-width: 4px;
+    border-style: solid;
+    border-color: var(--corner-color);
+    border-bottom-color: transparent !important;
+    border-left-color: transparent !important;
+}
+
+.jp-corner-x {
+    --corner-color: var(--color-axis-x);
+}
+
+.jp-corner-y {
+    --corner-color: var(--color-axis-y);
+}
+
+.jp-corner-z {
+    --corner-color: var(--color-axis-z);
+}

@@ -13,3 +13,12 @@ export function runDeferred() {
     for (let lambda of deferred.reverse())
         lambda();
 }
+
+export function deferRemoveElement(element: HTMLElement): HTMLElement {
+    defer(() => element.parentElement?.removeChild(element));
+    return element;
+}
+
+export function deferRemoveStyle(style: string) {
+    deferRemoveElement(document.head.appendChild(Interface.createElement('style', { type: 'text/css' }, style)));
+}

@@ -12,7 +12,7 @@ export function loadGltfExport() {
 
     replaceMethod(Codecs.gltf, 'compile', async function (original, options) {
         // Skip if export vertex weights is disabled or if project has vertex weights disabled
-        if (options.jp_vertex_weights !== true || (Project!['vertex_weights'] !== 'one' && Project!['vertex_weights'] !== 'four'))
+        if (options.jp_vertex_weights !== true || (Project!['jp_vertex_weights'] !== 'one' && Project!['jp_vertex_weights'] !== 'four'))
             return await original(options);
 
         // If export vertex weights is enabled, force armature enabled too
