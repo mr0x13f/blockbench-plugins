@@ -33,8 +33,8 @@ export function loadWeightsMode() {
             document.querySelector('.preview_view_mode_menu')?.classList.remove('jp-hidden');
         },
     }));
-    // This feels wrong but ok
     Panels['outliner'].condition.modes.push('weights');
+    defer(() => Panels['outliner'].condition.modes.remove('weights'));
 
     deferDelete(new Panel('vertex-weights', {
         name: 'Weights',

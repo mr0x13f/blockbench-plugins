@@ -37,7 +37,7 @@
                 </th>
             </tr>
             <tr v-for="vertex in mesh.vertices" :key="vertex.id" class="jp-vertex-row">
-                <td class="jp-weight-vertex-cell">
+                <td class="jp-weight-vertex-cell jp-hbox">
                     <div class="jp-vertex-component jp-corner jp-corner-x">{{ vertex.pos[0] }}</div>
                     <div class="jp-vertex-component jp-corner jp-corner-y">{{ vertex.pos[1] }}</div>
                     <div class="jp-vertex-component jp-corner jp-corner-z">{{ vertex.pos[2] }}</div>

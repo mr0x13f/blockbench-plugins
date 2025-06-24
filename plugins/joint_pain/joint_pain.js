@@ -23,7 +23,11 @@
                 deferred.push(lambda);
             }
         },
-        /***/ 43: 
+        /***/ 48: 
+        /***/ module => {
+            module.exports = "// Vertex shader that will replace the one used on textures\r\n// Based on texture.js @ 64\r\n// Edited to add skinning\r\n// Also changed the antialising bleed fix to an ifdef\r\n// Note that we use MAX_BONES_JP instead of THREE.js's normal MAX_BONES\r\n// because it's forcefully inserting a stupid value like 1024\r\n// and we can't change that.\r\n\r\nattribute float highlight;\r\n\r\nuniform bool SHADE;\r\nuniform int LIGHTSIDE;\r\n\r\n#ifdef USE_SKINNING\r\nuniform mat4 boneMatrices[ MAX_BONES_JP ];\r\n#endif\r\n\r\n#ifdef ANTIALIAS_BLEED_FIX\r\ncentroid varying vec2 vUv;\r\n#else\r\nvarying vec2 vUv;\r\n#endif\r\n\r\nvarying float light;\r\nvarying float lift;\r\n\r\nfloat AMBIENT = 0.5;\r\nfloat XFAC = -0.15;\r\nfloat ZFAC = 0.05;\r\n\r\nvoid main()\r\n{\r\n    mat4 skinnedModelViewMatrix = modelViewMatrix;\r\n\r\n#ifdef USE_SKINNING\r\n    skinnedModelViewMatrix = viewMatrix * (\r\n        skinWeight.x * boneMatrices[int(skinIndex.x)] +\r\n        skinWeight.y * boneMatrices[int(skinIndex.y)] +\r\n        skinWeight.z * boneMatrices[int(skinIndex.z)] +\r\n        skinWeight.w * boneMatrices[int(skinIndex.w)] );\r\n#endif\r\n\r\n    if (SHADE) {\r\n\r\n        vec3 N = normalize( mat3(skinnedModelViewMatrix) * normal );\r\n\r\n        if (LIGHTSIDE == 1) {\r\n            float temp = N.y;\r\n            N.y = N.z * -1.0;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 2) {\r\n            float temp = N.y;\r\n            N.y = N.x;\r\n            N.x = temp;\r\n        }\r\n        if (LIGHTSIDE == 3) {\r\n            N.y = N.y * -1.0;\r\n        }\r\n        if (LIGHTSIDE == 4) {\r\n            float temp = N.y;\r\n            N.y = N.z;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 5) {\r\n            float temp = N.y;\r\n            N.y = N.x * -1.0;\r\n            N.x = temp;\r\n        }\r\n\r\n        float yLight = (1.0+N.y) * 0.5;\r\n        light = yLight * (1.0-AMBIENT) + N.x*N.x * XFAC + N.z*N.z * ZFAC + AMBIENT;\r\n\r\n    } else {\r\n\r\n        light = 1.0;\r\n\r\n    }\r\n\r\n    if (highlight == 2.0) {\r\n        lift = 0.22;\r\n    } else if (highlight == 1.0) {\r\n        lift = 0.1;\r\n    } else {\r\n        lift = 0.0;\r\n    }\r\n    \r\n    vUv = uv;\r\n    vec4 mvPosition = skinnedModelViewMatrix * vec4( position, 1.0 );\r\n    gl_Position = projectionMatrix * mvPosition;\r\n}\r\n";
+            /***/        },
+        /***/ 63: 
         /***/ (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
             // ESM COMPAT FLAG
             __webpack_require__.r(__webpack_exports__), 
@@ -32,7 +36,7 @@
                 __esModule: () => /* reexport */ WeightsPanelvue_type_script_lang_ts /* __esModule */ .B,
                 default: () => /* binding */ WeightsPanel
             });
-            // ./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./plugin/components/WeightsPanel.vue?vue&type=template&id=7f90dbc0
+            // ./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./plugin/components/WeightsPanel.vue?vue&type=template&id=daedb014
             var render = function render() {
                 var _vm = this, _c = _vm._self._c;
                 return _c("div", {
@@ -91,7 +95,7 @@
                         key: vertex.id,
                         staticClass: "jp-vertex-row"
                     }, [ _c("td", {
-                        staticClass: "jp-weight-vertex-cell"
+                        staticClass: "jp-weight-vertex-cell jp-hbox"
                     }, [ _c("div", {
                         staticClass: "jp-vertex-component jp-corner jp-corner-x"
                     }, [ _vm._v(_vm._s(vertex.pos[0])) ]), _vm._v(" "), _c("div", {
@@ -121,7 +125,7 @@
                 })) ], 2) ]);
             };
             render._withStripped = !0;
-            // ./plugin/components/WeightsPanel.vue?vue&type=template&id=7f90dbc0
+            // ./plugin/components/WeightsPanel.vue?vue&type=template&id=daedb014
             // EXTERNAL MODULE: ./node_modules/ts-loader/index.js??clonedRuleSet-1!./node_modules/vue-loader/lib/index.js??vue-loader-options!./plugin/components/WeightsPanel.vue?vue&type=script&lang=ts
             var WeightsPanelvue_type_script_lang_ts = __webpack_require__(224);
             var component = // ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
@@ -187,10 +191,6 @@
             } ], !1, null, null, null)
             /* harmony default export */;
             const WeightsPanel = component.exports;
-            /***/        },
-        /***/ 48: 
-        /***/ module => {
-            module.exports = "// Vertex shader that will replace the one used on textures\r\n// Based on texture.js @ 64\r\n// Edited to add skinning\r\n// Also changed the antialising bleed fix to an ifdef\r\n// Note that we use MAX_BONES_JP instead of THREE.js's normal MAX_BONES\r\n// because it's forcefully inserting a stupid value like 1024\r\n// and we can't change that.\r\n\r\nattribute float highlight;\r\n\r\nuniform bool SHADE;\r\nuniform int LIGHTSIDE;\r\n\r\n#ifdef USE_SKINNING\r\nuniform mat4 boneMatrices[ MAX_BONES_JP ];\r\n#endif\r\n\r\n#ifdef ANTIALIAS_BLEED_FIX\r\ncentroid varying vec2 vUv;\r\n#else\r\nvarying vec2 vUv;\r\n#endif\r\n\r\nvarying float light;\r\nvarying float lift;\r\n\r\nfloat AMBIENT = 0.5;\r\nfloat XFAC = -0.15;\r\nfloat ZFAC = 0.05;\r\n\r\nvoid main()\r\n{\r\n    mat4 skinnedModelViewMatrix = modelViewMatrix;\r\n\r\n#ifdef USE_SKINNING\r\n    skinnedModelViewMatrix = viewMatrix * (\r\n        skinWeight.x * boneMatrices[int(skinIndex.x)] +\r\n        skinWeight.y * boneMatrices[int(skinIndex.y)] +\r\n        skinWeight.z * boneMatrices[int(skinIndex.z)] +\r\n        skinWeight.w * boneMatrices[int(skinIndex.w)] );\r\n#endif\r\n\r\n    if (SHADE) {\r\n\r\n        vec3 N = normalize( mat3(skinnedModelViewMatrix) * normal );\r\n\r\n        if (LIGHTSIDE == 1) {\r\n            float temp = N.y;\r\n            N.y = N.z * -1.0;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 2) {\r\n            float temp = N.y;\r\n            N.y = N.x;\r\n            N.x = temp;\r\n        }\r\n        if (LIGHTSIDE == 3) {\r\n            N.y = N.y * -1.0;\r\n        }\r\n        if (LIGHTSIDE == 4) {\r\n            float temp = N.y;\r\n            N.y = N.z;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 5) {\r\n            float temp = N.y;\r\n            N.y = N.x * -1.0;\r\n            N.x = temp;\r\n        }\r\n\r\n        float yLight = (1.0+N.y) * 0.5;\r\n        light = yLight * (1.0-AMBIENT) + N.x*N.x * XFAC + N.z*N.z * ZFAC + AMBIENT;\r\n\r\n    } else {\r\n\r\n        light = 1.0;\r\n\r\n    }\r\n\r\n    if (highlight == 2.0) {\r\n        lift = 0.22;\r\n    } else if (highlight == 1.0) {\r\n        lift = 0.1;\r\n    } else {\r\n        lift = 0.0;\r\n    }\r\n    \r\n    vUv = uv;\r\n    vec4 mvPosition = skinnedModelViewMatrix * vec4( position, 1.0 );\r\n    gl_Position = projectionMatrix * mvPosition;\r\n}\r\n";
             /***/        },
         /***/ 93: 
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {
@@ -446,7 +446,7 @@
                     }
                 })), refreshModeSelector(), (0, defer_1.defer)(refreshModeSelector);
             };
-            const defer_1 = __webpack_require__(40), WeightsPanel_vue_1 = __importDefault(__webpack_require__(43)), weights_panel_css_1 = __importDefault(__webpack_require__(868)), util_1 = __webpack_require__(266);
+            const defer_1 = __webpack_require__(40), WeightsPanel_vue_1 = __importDefault(__webpack_require__(63)), weights_panel_css_1 = __importDefault(__webpack_require__(868)), util_1 = __webpack_require__(266);
             function refreshModeSelector() {
                 var _a, _b;
                 null === (_b = null === (_a = document.querySelector("#mode_selector")) || void 0 === _a ? void 0 : _a.__vue__) || void 0 === _b || _b.$forceUpdate();
@@ -495,7 +495,7 @@
         },
         /***/ 868: 
         /***/ module => {
-            module.exports = '\r\n.jp-weights-panel {\r\n    overflow: scroll;\r\n    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);\r\n    /* Move left because first column is 200px instead of 300px */\r\n    background-position: -100px 0;\r\n}\r\n\r\n.jp-weights-panel .icon {\r\n    vertical-align: text-top;\r\n}\r\n\r\n.jp-weights-table {\r\n    border-spacing: 0;\r\n}\r\n\r\n.jp-weights-table .jp-parent-indicator {\r\n    font-weight: normal;\r\n    font-style: italic;\r\n    font-size: 0.9em;\r\n}\r\n\r\n.jp-weights-table .jp-parent-name {\r\n    font-weight: bold;\r\n}\r\n\r\n.jp-weights-table .jp-group-header .jp-group-remove {\r\n    opacity: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove {\r\n    background-color: var(--color-button);\r\n    opacity: 1;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove:hover {\r\n    background-color: var(--color-accent);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-vertex-row {\r\n    height: 30px;\r\n}\r\n\r\n.jp-weights-table td,\r\n.jp-weights-table th {\r\n    min-width: 300px;\r\n    max-width: 300px;\r\n}\r\n\r\n.jp-weights-table td:first-child,\r\n.jp-weights-table th:first-child {\r\n    min-width: 200px;\r\n    max-width: 200px;\r\n}\r\n\r\n.jp-weights-table .jp-weight-vertex-cell {\r\n    text-align: center;\r\n    /* width: calc(200px / 3); */\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell input {\r\n    text-align: right;\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-has-influence {\r\n    background-color: var(--group-color-dark);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-no-influence {\r\n    /* background-color: var(--color-dark); */\r\n}\r\n\r\n.jp-weights-table .jp-vertex-component {\r\n    width: 33.3%;\r\n}\r\n\r\n.jp-corner {\r\n    position: relative;\r\n}\r\n\r\n.jp-corner::before {\r\n    content: "";\r\n    position: absolute;\r\n    pointer-events: none;\r\n    top: 0;\r\n    right: 0;\r\n    border-width: 4px;\r\n    border-style: solid;\r\n    border-color: var(--corner-color);\r\n    border-bottom-color: transparent !important;\r\n    border-left-color: transparent !important;\r\n}\r\n\r\n.jp-corner-x {\r\n    --corner-color: var(--color-axis-x);\r\n}\r\n\r\n.jp-corner-y {\r\n    --corner-color: var(--color-axis-y);\r\n}\r\n\r\n.jp-corner-z {\r\n    --corner-color: var(--color-axis-z);\r\n}';
+            module.exports = '\r\n.jp-weights-panel {\r\n    overflow: scroll;\r\n}\r\n\r\n.jp-weights-panel .icon {\r\n    vertical-align: text-top;\r\n}\r\n\r\n.jp-weights-table {\r\n    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);\r\n    /* Move left because first column is 200px instead of 300px */\r\n    background-position: -100px 0;\r\n\r\n    border-spacing: 0;\r\n}\r\n\r\n.jp-weights-table .jp-parent-indicator {\r\n    font-weight: normal;\r\n    font-style: italic;\r\n    font-size: 0.9em;\r\n}\r\n\r\n.jp-weights-table .jp-parent-name {\r\n    font-weight: bold;\r\n}\r\n\r\n.jp-weights-table .jp-group-header .jp-group-remove {\r\n    opacity: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove {\r\n    background-color: var(--color-button);\r\n    opacity: 1;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove:hover {\r\n    background-color: var(--color-accent);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-vertex-row {\r\n    height: 30px;\r\n}\r\n\r\n.jp-weights-table td,\r\n.jp-weights-table th {\r\n    min-width: 300px;\r\n    max-width: 300px;\r\n}\r\n\r\n.jp-weights-table td:first-child,\r\n.jp-weights-table th:first-child {\r\n    min-width: 200px;\r\n    max-width: 200px;\r\n}\r\n\r\n.jp-weights-table .jp-weight-vertex-cell {\r\n    text-align: center;\r\n    /* width: calc(200px / 3); */\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell input {\r\n    text-align: right;\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-has-influence {\r\n    background-color: var(--group-color-dark);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-no-influence {\r\n    /* background-color: var(--color-dark); */\r\n}\r\n\r\n.jp-weights-table .jp-vertex-component {\r\n    /* width: 33.3%; */\r\n}\r\n\r\n.jp-corner {\r\n    position: relative;\r\n}\r\n\r\n.jp-corner::before {\r\n    content: "";\r\n    position: absolute;\r\n    pointer-events: none;\r\n    top: 0;\r\n    right: 0;\r\n    border-width: 4px;\r\n    border-style: solid;\r\n    border-color: var(--corner-color);\r\n    border-bottom-color: transparent !important;\r\n    border-left-color: transparent !important;\r\n}\r\n\r\n.jp-corner-x {\r\n    --corner-color: var(--color-axis-x);\r\n}\r\n\r\n.jp-corner-y {\r\n    --corner-color: var(--color-axis-y);\r\n}\r\n\r\n.jp-corner-z {\r\n    --corner-color: var(--color-axis-z);\r\n}';
             /***/        },
         /***/ 941: 
         /***/ function(__unused_webpack_module, exports, __webpack_require__) {
@@ -537,7 +537,7 @@
         },
         /***/ 950: 
         /***/ module => {
-            module.exports = ".jp-hidden {\r\n    display: none !important;\r\n}\r\n";
+            module.exports = '.jp-hidden {\r\n    display: none !important;\r\n}\r\n\r\n.jp-hbox, .jp-vbox {\r\n    display: flex;\r\n    box-sizing: border-box;\r\n    justify-content: center;\r\n}\r\n\r\n.jp-vbox {\r\n    flex-direction: column;\r\n}\r\n\r\n.jp-hbox > *, .jp-vbox > * {\r\n    flex: 1;\r\n    min-width: 0;\r\n    min-height: 0;\r\n}\r\n\r\n.jp-vbox > *[style*="height:"]:not([style*="min-height:"]):not([style*="max-height:"]),\r\n.jp-hbox > *[style*="width:"]:not([style*="min-width:"]):not([style*="max-width:"]) {\r\n    flex: 0 0 auto;\r\n}\r\n\r\n.jp-content-sized {\r\n    flex: 0;\r\n    min-width: auto;\r\n    min-height: auto;\r\n}\r\n\r\n.jp-gap20 {\r\n    gap: 20px;\r\n}\r\n';
             /***/
             /******/        }
     }, __webpack_module_cache__ = {};

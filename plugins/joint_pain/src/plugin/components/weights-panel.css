@@ -1,9 +1,6 @@
 
 .jp-weights-panel {
     overflow: scroll;
-    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);
-    /* Move left because first column is 200px instead of 300px */
-    background-position: -100px 0;
 }
 
 .jp-weights-panel .icon {
@@ -11,6 +8,10 @@
 }
 
 .jp-weights-table {
+    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);
+    /* Move left because first column is 200px instead of 300px */
+    background-position: -100px 0;
+
     border-spacing: 0;
 }
 
@@ -74,7 +75,7 @@
 }
 
 .jp-weights-table .jp-vertex-component {
-    width: 33.3%;
+    /* width: 33.3%; */
 }
 
 .jp-corner {
