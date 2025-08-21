@@ -8,9 +8,10 @@
 }
 
 .jp-weights-table {
-    background-image: repeating-linear-gradient(to right, var(--color-dark) 0px, var(--color-dark) 300px, var(--color-back) 300px, var(--color-back) 600px);
-    /* Move left because first column is 200px instead of 300px */
-    background-position: -100px 0;
+    background-image: repeating-linear-gradient(to right, var(--color-back) 0px, var(--color-back) 300px, var(--color-dark) 300px, var(--color-dark) 600px);
+    /* Move right because first column is 200px instead of 300px */
+    /* Showing 200px of void behind background */
+    background-position: 200px 0;
 
     border-spacing: 0;
 }
@@ -61,6 +62,11 @@
     /* width: calc(200px / 3); */
 }
 
+.jp-weights-table .jp-weight-percentage-cell {
+    text-align: center;
+    /* width: calc(200px / 3); */
+}
+
 .jp-weights-table .jp-weight-percentage-cell input {
     text-align: right;
 }
@@ -76,6 +82,10 @@
 
 .jp-weights-table .jp-vertex-component {
     /* width: 33.3%; */
+}
+
+.jp-weight-check {
+    color: var(--color-text);
 }
 
 .jp-corner {

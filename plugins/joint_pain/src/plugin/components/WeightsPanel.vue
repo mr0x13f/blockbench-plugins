@@ -46,7 +46,12 @@
                     :class="{ 'jp-has-influence': weight > 0, 'jp-no-influence': weight === 0 }"
                     :style="{ '--group-color-dark': mesh.groups[groupIndex].dark }">
                     <div v-if="projectVertexWeightSetting === 'one'">
-                        <input type="radio" :checked="weight > 0">
+                        <span v-if="weight > 0"
+                                class="material-icons"
+                            >check</span>
+                        <span v-else
+                                class="material-icons"
+                            >check_box_outline_blank</span>
                     </div>
                     <div v-else>
                         {{ weight * 100 }}%

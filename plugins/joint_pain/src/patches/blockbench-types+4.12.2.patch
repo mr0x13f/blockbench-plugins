@@ -42,6 +42,22 @@ index 550d83a..0a170b3 100644
  	/**
  	 * Raycast on the currently selected preview
  	 */
+diff --git a/node_modules/blockbench-types/types/dialog.d.ts b/node_modules/blockbench-types/types/dialog.d.ts
+index 6162e0f..97e9db9 100644
+--- a/node_modules/blockbench-types/types/dialog.d.ts
++++ b/node_modules/blockbench-types/types/dialog.d.ts
+@@ -104,6 +104,11 @@ interface FormElement {
+ 	 * @param button_index Index of the clicked button in the buttons list
+ 	 */
+ 	click?: (button_index: number) => void
++
++	return_as?: string,
++	extensions?: string[],
++	resource_id?: string,
++	filetype?: string,
+ }
+ 
+ type FormResultValue = string | number | boolean | []
 diff --git a/node_modules/blockbench-types/types/mesh.d.ts b/node_modules/blockbench-types/types/mesh.d.ts
 index fb315a5..03ecaca 100644
 --- a/node_modules/blockbench-types/types/mesh.d.ts

@@ -4,7 +4,7 @@ export function defer(lambda: ()=>void) {
     deferred.push(lambda);
 }
 
-export function deferDelete(deletable: Deletable) {
+export function deferDelete<T extends Deletable>(deletable: T): T {
     defer(() => deletable.delete());
     return deletable;
 }
