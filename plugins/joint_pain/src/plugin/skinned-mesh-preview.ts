@@ -56,12 +56,6 @@ function skinMesh(element: Mesh) {
         // If no vertex weights are set, treat as empty weights
         vertexWeights ??= {} as {[groupId:string]:number};
 
-        // TODO: remove debug
-        if (element.name === 'arm_left' && ['D1jz', 'PCxt', 'Rndw', 'csvZ', 'jraI'].includes(vertexId)) {// bottom vertices of of left_arm
-            // Group left_arm_lower -> 100%
-            vertexWeights = { 'becc810e-369e-2427-19e8-f5328e20de59': 1 };
-        }
-
         // No weights, just stay idle
         let idleWorldPos = previewMesh.localToWorld(new THREE.Vector3(...vertex));
         // Vertex position in parent group's local space (not element's local space)
@@ -136,7 +130,4 @@ function skinMesh(element: Mesh) {
     Mesh.preview_controller.updatePixelGrid(element);
     if (Project?.view_mode == 'wireframe' && Mesh.preview_controller.fixWireframe)
         Mesh.preview_controller.fixWireframe(element);
-
-    // TODO: Maybe? probably not? Depends how plugins use this event, tbd
-    // Mesh.preview_controller.dispatchEvent('update_geometry', {element});
 }

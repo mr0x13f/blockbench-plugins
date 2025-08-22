@@ -1,4 +1,22 @@
-# Preview
+# Project setup
+```js
+Mesh.all.find(m => m.name === 'arm_left').jp_weights = {
+    // Bottom 5 vertices -> left_arm_lower
+    'D1jz': { 'becc810e-369e-2427-19e8-f5328e20de59': 1 }, 
+    'PCxt': { 'becc810e-369e-2427-19e8-f5328e20de59': 1 }, 
+    'Rndw': { 'becc810e-369e-2427-19e8-f5328e20de59': 1 }, 
+    'csvZ': { 'becc810e-369e-2427-19e8-f5328e20de59': 1 }, 
+    'jraI': { 'becc810e-369e-2427-19e8-f5328e20de59': 1 },
+    // Top 5 vertices -> root
+    'ByEv': { '54f1011c-8441-d602-d881-7f59e8c97913': 1 }, 
+    'VzUc': { '54f1011c-8441-d602-d881-7f59e8c97913': 1 }, 
+    'oyg2': { '54f1011c-8441-d602-d881-7f59e8c97913': 1 }, 
+    'uePO': { '54f1011c-8441-d602-d881-7f59e8c97913': 1 }, 
+    'zObx': { '54f1011c-8441-d602-d881-7f59e8c97913': 1 },
+}
+```
+
+# Skinned Preview
 The preview scene uses raycasts for selecting meshes and such. Three.js doesn't support raycasts against skinned meshes, so we can't use skinned meshes for displaying poses. Instead we should reposition vertices based on a virtual skeleton. This also means we don't need to replace any preview node objects like Meshes or Object3Ds.
 
 Relevant Blockbench code: 
@@ -24,3 +42,6 @@ Per vertex we need to:
 use `mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position_array), 3))`
 to update vertices
 
+# Weight View Mode
+
+The default view modes are handled in `updateFaces() @ mesh.js:1145`

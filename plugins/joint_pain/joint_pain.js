@@ -112,9 +112,7 @@
                 let previewMesh = element.mesh, outline = previewMesh.outline, vertexPoints = previewMesh.vertex_points, transposedVertices = {};
                 for (let [vertexId, vertex] of Object.entries(element.vertices)) {
                     let vertexWeights = null === (_a = element.jp_weights) || void 0 === _a ? void 0 : _a[vertexId];
-                    null != vertexWeights || (vertexWeights = {}), "arm_left" === element.name && [ "D1jz", "PCxt", "Rndw", "csvZ", "jraI" ].includes(vertexId) && (vertexWeights = {
-                        "becc810e-369e-2427-19e8-f5328e20de59": 1
-                    });
+                    null != vertexWeights || (vertexWeights = {});
                     let idleWorldPos = previewMesh.localToWorld(new THREE.Vector3(...vertex)), parentLocalPos = previewMesh.parent.worldToLocal(idleWorldPos), weightedAverageWorldPos = new THREE.Vector3, totalWeight = 0;
                     for (let [groupId, groupWeight] of Object.entries(vertexWeights)) {
                         let groupNode = Canvas.scene.getObjectByName(groupId);
