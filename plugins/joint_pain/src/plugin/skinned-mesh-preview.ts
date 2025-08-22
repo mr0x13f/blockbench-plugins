@@ -3,6 +3,7 @@ import { isVertexWeightEnabledFor } from './util';
 
 export function loadSkinnedMeshPreview() {
     
+    // Hook in after the Animator has posed the groups
     replaceMethod(Animator, 'stackAnimations', function(original, animations, in_loop, controller_blend_values = 0) {
         original(animations, in_loop, controller_blend_values);
 
@@ -10,6 +11,7 @@ export function loadSkinnedMeshPreview() {
             skinMeshes();
     });
 
+    // Hook in after the groups have been reset to the idle pose
     replaceMethod(Animator, 'showDefaultPose', function(original, no_matrix_update) {
         original(no_matrix_update);
 
