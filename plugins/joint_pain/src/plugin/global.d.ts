@@ -56,8 +56,15 @@ declare global {
     //////////////////////////////////////////////////////////
 
     interface ModelProject {
-        skeleton: THREE.Skeleton|undefined;
-        jp_vertex_weights: 'disabled'|'one'|'four'|undefined;
+        jp_vertex_weights: 'disabled'|'one'|'four'|'unlimited'|undefined;
+    }
+
+    interface Mesh {
+        jp_weights: {
+            [vertexId: string]: {
+                [groupId: string]: number
+            }
+        };
     }
 
 }

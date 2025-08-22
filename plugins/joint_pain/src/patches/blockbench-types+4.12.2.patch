@@ -1,3 +1,16 @@
+diff --git a/node_modules/blockbench-types/types/animation.d.ts b/node_modules/blockbench-types/types/animation.d.ts
+index c9e1afb..3e2f32d 100644
+--- a/node_modules/blockbench-types/types/animation.d.ts
++++ b/node_modules/blockbench-types/types/animation.d.ts
+@@ -154,6 +154,8 @@ declare namespace Animator {
+ 		position: number,
+ 		type: string
+ 	): MolangAutoCompletionItem[]
++
++	function stackAnimations(animations: Animation[], in_loop: boolean, controller_blend_values = 0): void
+ }
+ 
+ interface AddChannelOptions {
 diff --git a/node_modules/blockbench-types/types/blockbench.d.ts b/node_modules/blockbench-types/types/blockbench.d.ts
 index fc44a9d..ca9c45f 100644
 --- a/node_modules/blockbench-types/types/blockbench.d.ts
@@ -146,12 +159,19 @@ index 790ba10..d85f308 100644
  	 * Identifier of another panel to insert this one above
  	 */
 diff --git a/node_modules/blockbench-types/types/three.d.ts b/node_modules/blockbench-types/types/three.d.ts
-index fa4f301..7f76797 100644
+index fa4f301..48974fd 100644
 --- a/node_modules/blockbench-types/types/three.d.ts
 +++ b/node_modules/blockbench-types/types/three.d.ts
-@@ -1,4 +1,4 @@
+@@ -1,9 +1,10 @@
 -import three from 'three'
 +import THREE from 'three'
  
  declare module 'three' {
  	interface Object3D {
+ 		/**The outline mesh of the mesh */
+-		outline?: three.Object3D | three.Mesh
++		outline?: three.LineSegments
++		vertex_points?: three.Points
+ 		fix_rotation?: three.Euler
+ 		fix_position?: three.Vector3
+ 		no_export?: boolean

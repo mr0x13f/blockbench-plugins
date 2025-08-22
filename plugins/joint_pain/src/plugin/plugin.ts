@@ -6,6 +6,7 @@ import { loadWeightsMode } from './weights-mode';
 import { loadBlenderIntegration } from './blender-integration';
 import globalStyles from './components/styles.css'
 import { addStyle } from './util';
+import { DeepClonedObjectProperty } from './deep-cloned-object-property';
 
 BBPlugin.register('joint_pain', {
     
@@ -21,6 +22,11 @@ BBPlugin.register('joint_pain', {
 
         // TODO: new setting "show group pivots in edit and animate mode"
 
+        // TODO: add warning when this is changed
+        // disabled -> * : WARNING: editing this project without the Joint Pain plugin installed will cause the vertex weight data to be lost!
+        // four -> one : WARNING: changing from four to one weights per vertex will cause weight information to be lost! Only the most significant weight per vertex will be preserved.
+        // unlimited -> four|one : WARNING: changing from unlimited to four weights per vertex will cause weight information to be lost! Only the four most significant weight per vertex will be preserved.
+        // * -> unlimited : WARNING: a project with unlimited vertex weights cannot be exported with vertex weights
         deferDelete(new Property(ModelProject, 'enum', 'jp_vertex_weights', {
             label: 'Joint Pain: Vertex Weights',
             description: '' + 
@@ -31,13 +37,22 @@ BBPlugin.register('joint_pain', {
                 'It offers the most freedom but may be harder to work with. ' +
                 '"One" used to be the standard with early 3D graphics. ' +
                 'It can be easier to work with and may help achieve a more authentic retro style. ' +
+                '"Unlimited" can only be used within Blockbench. ' +
+                'It cannot be exported as a glTF model.  ' +
                 '',
-            default: 'disabled',
             options: {
-                'disabled': 'Disabled',
-                'one':      '1 Weight per Vertex (Retro)',
-                'four':     '4 Weights per Vertex (Modern)',
-            }
+                'disabled':  'Disabled',
+                'four':      '4 Weights per Vertex (Standard)',
+                'one':       '1 Weight per Vertex (Retro)',
+                'unlimited': 'Unlimited Weights per Vertex (Can\'t export)',
+            },
+            default: 'disabled',
+        }));
+
+        // Map of vertex ids to a map of group ids to a normalized weight number
+        deferDelete(new DeepClonedObjectProperty(Mesh, 'jp_weights', {
+            exposed: false,
+            default: undefined,
         }));
 
         addStyle(globalStyles);

@@ -23,10 +23,6 @@
                 deferred.push(lambda);
             }
         },
-        /***/ 48: 
-        /***/ module => {
-            module.exports = "// Vertex shader that will replace the one used on textures\r\n// Based on texture.js @ 64\r\n// Edited to add skinning\r\n// Also changed the antialising bleed fix to an ifdef\r\n// Note that we use MAX_BONES_JP instead of THREE.js's normal MAX_BONES\r\n// because it's forcefully inserting a stupid value like 1024\r\n// and we can't change that.\r\n\r\nattribute float highlight;\r\n\r\nuniform bool SHADE;\r\nuniform int LIGHTSIDE;\r\n\r\n#ifdef USE_SKINNING\r\nuniform mat4 boneMatrices[ MAX_BONES_JP ];\r\n#endif\r\n\r\n#ifdef ANTIALIAS_BLEED_FIX\r\ncentroid varying vec2 vUv;\r\n#else\r\nvarying vec2 vUv;\r\n#endif\r\n\r\nvarying float light;\r\nvarying float lift;\r\n\r\nfloat AMBIENT = 0.5;\r\nfloat XFAC = -0.15;\r\nfloat ZFAC = 0.05;\r\n\r\nvoid main()\r\n{\r\n    mat4 skinnedModelViewMatrix = modelViewMatrix;\r\n\r\n#ifdef USE_SKINNING\r\n    skinnedModelViewMatrix = viewMatrix * (\r\n        skinWeight.x * boneMatrices[int(skinIndex.x)] +\r\n        skinWeight.y * boneMatrices[int(skinIndex.y)] +\r\n        skinWeight.z * boneMatrices[int(skinIndex.z)] +\r\n        skinWeight.w * boneMatrices[int(skinIndex.w)] );\r\n#endif\r\n\r\n    if (SHADE) {\r\n\r\n        vec3 N = normalize( mat3(skinnedModelViewMatrix) * normal );\r\n\r\n        if (LIGHTSIDE == 1) {\r\n            float temp = N.y;\r\n            N.y = N.z * -1.0;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 2) {\r\n            float temp = N.y;\r\n            N.y = N.x;\r\n            N.x = temp;\r\n        }\r\n        if (LIGHTSIDE == 3) {\r\n            N.y = N.y * -1.0;\r\n        }\r\n        if (LIGHTSIDE == 4) {\r\n            float temp = N.y;\r\n            N.y = N.z;\r\n            N.z = temp;\r\n        }\r\n        if (LIGHTSIDE == 5) {\r\n            float temp = N.y;\r\n            N.y = N.x * -1.0;\r\n            N.x = temp;\r\n        }\r\n\r\n        float yLight = (1.0+N.y) * 0.5;\r\n        light = yLight * (1.0-AMBIENT) + N.x*N.x * XFAC + N.z*N.z * ZFAC + AMBIENT;\r\n\r\n    } else {\r\n\r\n        light = 1.0;\r\n\r\n    }\r\n\r\n    if (highlight == 2.0) {\r\n        lift = 0.22;\r\n    } else if (highlight == 1.0) {\r\n        lift = 0.1;\r\n    } else {\r\n        lift = 0.0;\r\n    }\r\n    \r\n    vUv = uv;\r\n    vec4 mvPosition = skinnedModelViewMatrix * vec4( position, 1.0 );\r\n    gl_Position = projectionMatrix * mvPosition;\r\n}\r\n";
-            /***/        },
         /***/ 93: 
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {
             Object.defineProperty(exports, "__esModule", {
@@ -75,77 +71,53 @@
             };
             const defer_1 = __webpack_require__(40);
         },
+        /***/ 168: 
+        /***/ (__unused_webpack_module, exports) => {
+            Object.defineProperty(exports, "__esModule", {
+                value: !0
+            }), exports.DeepClonedObjectProperty = void 0;
+            class DeepClonedObjectProperty extends Property {
+                constructor(targetClass, name, options) {
+                    super(targetClass, "object", name, options);
+                }
+                merge(instance, data) {
+                    null == data[this.name] ? instance[this.name] = void 0 : "object" == typeof data[this.name] && (instance[this.name] = JSON.parse(JSON.stringify(data[this.name])), 
+                    JSON.stringify(instance[this.name]), 0 === Object.keys(instance[this.name]).length && (instance[this.name] = void 0));
+                }
+                copy(instance, target) {
+                    null == instance[this.name] ? target[this.name] = void 0 : "object" == typeof instance[this.name] && (target[this.name] = JSON.parse(JSON.stringify(instance[this.name])), 
+                    0 === Object.keys(target[this.name]).length && (target[this.name] = void 0));
+                }
+            }
+            exports.DeepClonedObjectProperty = DeepClonedObjectProperty;
+        }
+        /***/ ,
         /***/ 193: 
-        /***/ function(__unused_webpack_module, exports, __webpack_require__) {
-            var __importDefault = this && this.__importDefault || function(mod) {
-                return mod && mod.__esModule ? mod : {
-                    default: mod
-                };
-            };
+        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.loadSkinnedMeshPreview = function loadSkinnedMeshPreview() {
-                (0, replace_method_1.replaceMethod)(Mesh.preview_controller, "updateTransform", (function(original, element) {
-                    if (!1 === (0, util_1.isVertexWeightEnabledFor)(Project)) return original(element);
-                    element.mesh instanceof THREE.SkinnedMesh || function replaceElementMeshWithSkinnedMesh(element) {
-                        let oldMesh = element.mesh, parent = oldMesh.parent;
-                        oldMesh.removeFromParent();
-                        let skinnedMesh = new THREE.SkinnedMesh(oldMesh.geometry, oldMesh.material);
-                        if (Project.nodes_3d[element.uuid] = skinnedMesh, null == parent || parent.add(skinnedMesh), 
-                        skinnedMesh.name = element.uuid, skinnedMesh.type = element.type, skinnedMesh.isElement = !0, 
-                        skinnedMesh.geometry.setAttribute("highlight", oldMesh.geometry.getAttribute("highlight")), 
-                        skinnedMesh.outline = oldMesh.outline, skinnedMesh.add(skinnedMesh.outline), skinnedMesh.vertex_points = oldMesh.vertex_points, 
-                        (0, replace_method_1.replaceMethod)(skinnedMesh, "boneTransform", (function(original, t, e) {
-                            return original(t, e);
-                        })), null == (null === Project || void 0 === Project ? void 0 : Project.skeleton)) {
-                            let rootBone = new THREE.Bone, childBone = new THREE.Bone;
-                            childBone.position.x = 10, rootBone.add(childBone), Project.skeleton = new THREE.Skeleton([ rootBone, childBone ]), 
-                            Canvas.scene.add(Project.skeleton.bones[0]);
+                (0, replace_method_1.replaceMethod)(Animator, "stackAnimations", (function(original, animations, in_loop, controller_blend_values = 0) {
+                    original(animations, in_loop, controller_blend_values), (0, util_1.isVertexWeightEnabledFor)(Project) && function skinMeshes() {
+                        console.log("skin!");
+                        let meshes = Outliner.elements.filter((e => "mesh" === e.type)).map((e => e));
+                        for (let mesh of meshes) {
+                            let previewMesh = mesh.mesh, outline = previewMesh.outline;
+                            previewMesh.vertex_points;
+                            Mesh.preview_controller.updateGeometry(mesh);
+                            previewMesh.geometry.attributes.position.count;
+                            let position_array = Array.from(previewMesh.geometry.attributes.position.array);
+                            for (let i = 0; i < position_array.length; i++) position_array[i] += 8;
+                            previewMesh.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(position_array), 3)), 
+                            previewMesh.geometry.computeBoundingBox(), previewMesh.geometry.computeBoundingSphere(), 
+                            outline.geometry.computeBoundingSphere(), setFlatNormals(previewMesh.geometry);
                         }
-                        skinnedMesh.geometry.setAttribute("skinIndex", new THREE.Uint16BufferAttribute(new Array(720).fill(0).flatMap((() => [ 0, 1, 0, 0 ])), 4)), 
-                        skinnedMesh.geometry.setAttribute("skinWeight", new THREE.Float32BufferAttribute(new Array(720).fill(0).flatMap((() => [ 0, 1, 0, 0 ])), 4)), 
-                        skinnedMesh.add(Project.skeleton.bones[0]), skinnedMesh.bindMode = "detached", skinnedMesh.bind(Project.skeleton);
-                    }(element), original(element);
-                })), (0, replace_method_1.replaceMethod)(Mesh.preview_controller, "updateGeometry", (function(original, element) {
-                    if (!1 === (0, util_1.isVertexWeightEnabledFor)(Project)) return original(element);
-                    original(element), element.mesh instanceof THREE.SkinnedMesh && function updateSkinnedMeshAttributes(element) {
-                        let vertex = new THREE.Vector3, skinWeights = [];
-                        for (let i = 0; i < element.mesh.geometry.attributes.position.count; i++) {
-                            vertex.fromBufferAttribute(element.mesh.geometry.attributes.position, i);
-                            let skinWeight = vertex.y / 10;
-                            skinWeight = Math.min(Math.max(skinWeight, 0), 1), skinWeights.push(1 - skinWeight, skinWeight, 0, 0);
-                        }
-                        element.mesh.geometry.setAttribute("skinWeight", new THREE.Float32BufferAttribute(skinWeights, 4));
-                    }(element);
-                })), (0, replace_method_1.replaceMethod)(Group.preview_controller, "setup", (function(original, group) {
-                    if (!1 === (0, util_1.isVertexWeightEnabledFor)(Project)) return original(group);
-                    let bone = new THREE.Bone;
-                    bone.name = group.uuid, bone.isGroup = !0, Project.nodes_3d[group.uuid] = bone, 
-                    this.dispatchEvent("update_transform", {
-                        group
-                    });
-                })), (0, defer_1.deferDelete)(Blockbench.on("select_project", (() => {
-                    initOrDestroyPreview();
-                }))), (0, defer_1.deferDelete)(Blockbench.on("update_settings", (() => {
-                    initOrDestroyPreview();
-                }))), initOrDestroyPreview();
+                    }();
+                }));
             };
-            const defer_1 = __webpack_require__(40), replace_method_1 = __webpack_require__(740), util_1 = __webpack_require__(266);
-            __importDefault(__webpack_require__(48));
-            function replaceRootWithBone() {
-                if (null == (null === Project || void 0 === Project ? void 0 : Project.model_3d) || Project.model_3d instanceof THREE.Bone) return;
-                let oldRoot = Project.model_3d, newRoot = new THREE.Bone;
-                newRoot.name = oldRoot.name;
-                for (let child of oldRoot.children) oldRoot.remove(child), newRoot.add(child);
-                ProjectData[Project.uuid].model_3d = newRoot, scene.remove(oldRoot), scene.add(newRoot);
-            }
-            function initOrDestroyPreview() {
-                null != Project && ((0, util_1.isVertexWeightEnabledFor)(Project) && null == Project.skeleton ? function initializePreview() {
-                    if (null == Project) return;
-                    replaceRootWithBone();
-                }() : !1 === (0, util_1.isVertexWeightEnabledFor)(Project) && Project.skeleton);
-            }
-        },
+            const replace_method_1 = __webpack_require__(740), util_1 = __webpack_require__(266);
+            function setFlatNormals(geometry) {}
+            /***/        },
         /***/ 224: 
         /***/ (__unused_webpack_module, exports) => {
             Object.defineProperty(exports, "B", {
@@ -533,7 +505,7 @@
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             });
-            const defer_1 = __webpack_require__(40), skinned_mesh_preview_1 = __webpack_require__(193), gltf_import_1 = __webpack_require__(93), gltf_export_1 = __webpack_require__(746), weights_mode_1 = __webpack_require__(361), blender_integration_1 = __webpack_require__(351), styles_css_1 = __importDefault(__webpack_require__(950)), util_1 = __webpack_require__(266);
+            const defer_1 = __webpack_require__(40), skinned_mesh_preview_1 = __webpack_require__(193), gltf_import_1 = __webpack_require__(93), gltf_export_1 = __webpack_require__(746), weights_mode_1 = __webpack_require__(361), blender_integration_1 = __webpack_require__(351), styles_css_1 = __importDefault(__webpack_require__(950)), util_1 = __webpack_require__(266), deep_cloned_object_property_1 = __webpack_require__(168);
             BBPlugin.register("joint_pain", {
                 title: "Joint Pain",
                 author: "0x13F",
@@ -545,13 +517,17 @@
                 onload() {
                     (0, defer_1.deferDelete)(new Property(ModelProject, "enum", "jp_vertex_weights", {
                         label: "Joint Pain: Vertex Weights",
-                        description: 'Vertex Weights mode for the project. The number of weights per vertex determines how many different bones can have greater than zero influence on any given vertex. "Four" is common for modern styles and is the max amount supported. It offers the most freedom but may be harder to work with. "One" used to be the standard with early 3D graphics. It can be easier to work with and may help achieve a more authentic retro style. ',
-                        default: "disabled",
+                        description: 'Vertex Weights mode for the project. The number of weights per vertex determines how many different bones can have greater than zero influence on any given vertex. "Four" is common for modern styles and is the max amount supported. It offers the most freedom but may be harder to work with. "One" used to be the standard with early 3D graphics. It can be easier to work with and may help achieve a more authentic retro style. "Unlimited" can only be used within Blockbench. It cannot be exported as a glTF model.  ',
                         options: {
                             disabled: "Disabled",
+                            four: "4 Weights per Vertex (Standard)",
                             one: "1 Weight per Vertex (Retro)",
-                            four: "4 Weights per Vertex (Modern)"
-                        }
+                            unlimited: "Unlimited Weights per Vertex (Can't export)"
+                        },
+                        default: "disabled"
+                    })), (0, defer_1.deferDelete)(new deep_cloned_object_property_1.DeepClonedObjectProperty(Mesh, "jp_weights", {
+                        exposed: !1,
+                        default: void 0
                     })), (0, util_1.addStyle)(styles_css_1.default), (0, weights_mode_1.loadWeightsMode)(), 
                     (0, skinned_mesh_preview_1.loadSkinnedMeshPreview)(), (0, gltf_import_1.loadGltfImport)(), 
                     (0, gltf_export_1.loadGltfExport)(), (0, blender_integration_1.loadBlenderIntegration)();
