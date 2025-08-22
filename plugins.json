@@ -1158,5 +1158,22 @@
 		"min_version": "4.12.5",
 		"has_changelog": false,
 		"repository": "https://github.com/JannisX11/blockbench-plugins/tree/master/plugins/export_to_3mf"
+	},
+	"joint_pain": {
+		"title": "Joint_Pain",
+		"author": "0x13F",
+		"description": "Add vertex weights to your model, akin to skeletal animation",
+		"icon": "rheumatology",
+		"creation_date": "2025-04-18",
+		"version": "1.0.0",
+		"variant": "both",
+		"min_version": "4.12.4",
+		"has_changelog": false,
+		"tags": [
+			"Format: Generic Model",
+			"Animation",
+			"Exporter"
+		],
+		"repository": "https://github.com/JannisX11/blockbench-plugins/tree/master/plugins/joint_pain"
 	}
 }
