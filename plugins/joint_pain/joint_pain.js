@@ -99,24 +99,50 @@
             }), exports.loadSkinnedMeshPreview = function loadSkinnedMeshPreview() {
                 (0, replace_method_1.replaceMethod)(Animator, "stackAnimations", (function(original, animations, in_loop, controller_blend_values = 0) {
                     original(animations, in_loop, controller_blend_values), (0, util_1.isVertexWeightEnabledFor)(Project) && function skinMeshes() {
-                        console.log("skin!");
-                        let meshes = Outliner.elements.filter((e => "mesh" === e.type)).map((e => e));
-                        for (let mesh of meshes) {
-                            let previewMesh = mesh.mesh, outline = previewMesh.outline;
-                            previewMesh.vertex_points;
-                            Mesh.preview_controller.updateGeometry(mesh);
-                            previewMesh.geometry.attributes.position.count;
-                            let position_array = Array.from(previewMesh.geometry.attributes.position.array);
-                            for (let i = 0; i < position_array.length; i++) position_array[i] += 8;
-                            previewMesh.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(position_array), 3)), 
-                            previewMesh.geometry.computeBoundingBox(), previewMesh.geometry.computeBoundingSphere(), 
-                            outline.geometry.computeBoundingSphere(), setFlatNormals(previewMesh.geometry);
-                        }
+                        console.log("skin!"), Outliner.elements.filter((e => "mesh" === e.type)).map((e => e)).forEach(skinMesh);
                     }();
                 }));
             };
             const replace_method_1 = __webpack_require__(740), util_1 = __webpack_require__(266);
-            function setFlatNormals(geometry) {}
+            function skinMesh(element) {
+                let previewMesh = element.mesh, outline = previewMesh.outline, vertexPoints = previewMesh.vertex_points, transposedVertices = {}, outlineVertexOrder = outline.vertex_order, positionBuffer = [], normalBuffer = [], vertexPointPositionBuffer = [], outlinePositionBuffer = [];
+                for (let [vertexId, vertex] of Object.entries(element.vertices)) {
+                    let vertexWeights;
+                    null != vertexWeights || (vertexWeights = {});
+                    let idleWorldPos = previewMesh.localToWorld(new THREE.Vector3(...vertex)), parentLocalPos = previewMesh.parent.worldToLocal(idleWorldPos), weightedAverageWorldPos = new THREE.Vector3, totalWeight = 0;
+                    for (let [groupId, groupWeight] of Object.entries(vertexWeights)) {
+                        let groupNode = Canvas.scene.getObjectByName(groupId);
+                        if (null == groupNode || !groupNode.isGroup) continue;
+                        let worldPosAsGroupChild = groupNode.localToWorld(parentLocalPos);
+                        weightedAverageWorldPos = weightedAverageWorldPos.addScaledVector(worldPosAsGroupChild, groupWeight), 
+                        totalWeight += groupWeight;
+                    }
+                    if (0 === totalWeight) transposedVertices[vertexId] = vertex; else {
+                        weightedAverageWorldPos = weightedAverageWorldPos.divideScalar(totalWeight);
+                        let weightedAverageLocalPos = previewMesh.worldToLocal(weightedAverageWorldPos);
+                        transposedVertices[vertexId] = weightedAverageLocalPos.toArray();
+                    }
+                }
+                for (let [faceKey, face] of Object.entries(element.faces)) if (2 === face.vertices.length) ; else if (face.vertices.length >= 3) {
+                    let indexOffset = positionBuffer.length / 3, faceIndices = {};
+                    face.vertices.forEach(((vertexId, i) => {
+                        if (!element.vertices[vertexId]) throw new Error(`Face "${faceKey}" in mesh "${element.name}" contains an invalid vertex key "${vertexId}"`);
+                        positionBuffer.push(...transposedVertices[vertexId]), faceIndices[vertexId] = indexOffset + i;
+                    }));
+                    let normal = face.getNormal(!0);
+                    normalBuffer.push(...Array(face.vertices.length).fill(normal).flatMap((x => x)));
+                }
+                vertexPointPositionBuffer.push(...Object.values(transposedVertices).flatMap((x => x))), 
+                outlinePositionBuffer.push(...outlineVertexOrder.flatMap((vertexId => transposedVertices[vertexId]))), 
+                previewMesh.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(positionBuffer), 3)), 
+                previewMesh.geometry.setAttribute("normal", new THREE.BufferAttribute(new Float32Array(normalBuffer), 3)), 
+                vertexPoints.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vertexPointPositionBuffer), 3)), 
+                outline.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(outlinePositionBuffer), 3)), 
+                previewMesh.geometry.setAttribute("highlight", new THREE.BufferAttribute(new Uint8Array(outlinePositionBuffer.length / 3).fill(previewMesh.geometry.attributes.highlight.array[0]), 1)), 
+                previewMesh.geometry.computeBoundingBox(), previewMesh.geometry.computeBoundingSphere(), 
+                vertexPoints.geometry.computeBoundingSphere(), outline.geometry.computeBoundingSphere(), 
+                Mesh.preview_controller.updatePixelGrid(element), "wireframe" == (null === Project || void 0 === Project ? void 0 : Project.view_mode) && Mesh.preview_controller.fixWireframe && Mesh.preview_controller.fixWireframe(element);
+            }
             /***/        },
         /***/ 224: 
         /***/ (__unused_webpack_module, exports) => {
@@ -493,7 +519,7 @@
         },
         /***/ 868: 
         /***/ module => {
-            module.exports = '\r\n.jp-weights-panel {\r\n    overflow: scroll;\r\n}\r\n\r\n.jp-weights-panel .icon {\r\n    vertical-align: text-top;\r\n}\r\n\r\n.jp-weights-table {\r\n    background-image: repeating-linear-gradient(to right, var(--color-back) 0px, var(--color-back) 300px, var(--color-dark) 300px, var(--color-dark) 600px);\r\n    /* Move right because first column is 200px instead of 300px */\r\n    /* Showing 200px of void behind background */\r\n    background-position: 200px 0;\r\n\r\n    border-spacing: 0;\r\n}\r\n\r\n.jp-weights-table .jp-parent-indicator {\r\n    font-weight: normal;\r\n    font-style: italic;\r\n    font-size: 0.9em;\r\n}\r\n\r\n.jp-weights-table .jp-parent-name {\r\n    font-weight: bold;\r\n}\r\n\r\n.jp-weights-table .jp-group-header .jp-group-remove {\r\n    opacity: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove {\r\n    background-color: var(--color-button);\r\n    opacity: 1;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove:hover {\r\n    background-color: var(--color-accent);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-vertex-row {\r\n    height: 30px;\r\n}\r\n\r\n.jp-weights-table td,\r\n.jp-weights-table th {\r\n    min-width: 300px;\r\n    max-width: 300px;\r\n}\r\n\r\n.jp-weights-table td:first-child,\r\n.jp-weights-table th:first-child {\r\n    min-width: 200px;\r\n    max-width: 200px;\r\n}\r\n\r\n.jp-weights-table .jp-weight-vertex-cell {\r\n    text-align: center;\r\n    /* width: calc(200px / 3); */\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell {\r\n    text-align: center;\r\n    /* width: calc(200px / 3); */\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell input {\r\n    text-align: right;\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-has-influence {\r\n    background-color: var(--group-color-dark);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-no-influence {\r\n    /* background-color: var(--color-dark); */\r\n}\r\n\r\n.jp-weights-table .jp-vertex-component {\r\n    /* width: 33.3%; */\r\n}\r\n\r\n.jp-weight-check {\r\n    color: var(--color-text);\r\n}\r\n\r\n.jp-corner {\r\n    position: relative;\r\n}\r\n\r\n.jp-corner::before {\r\n    content: "";\r\n    position: absolute;\r\n    pointer-events: none;\r\n    top: 0;\r\n    right: 0;\r\n    border-width: 4px;\r\n    border-style: solid;\r\n    border-color: var(--corner-color);\r\n    border-bottom-color: transparent !important;\r\n    border-left-color: transparent !important;\r\n}\r\n\r\n.jp-corner-x {\r\n    --corner-color: var(--color-axis-x);\r\n}\r\n\r\n.jp-corner-y {\r\n    --corner-color: var(--color-axis-y);\r\n}\r\n\r\n.jp-corner-z {\r\n    --corner-color: var(--color-axis-z);\r\n}\r\n';
+            module.exports = '\r\n.jp-weights-panel {\r\n    overflow: scroll;\r\n}\r\n\r\n.jp-weights-panel .icon {\r\n    vertical-align: text-top;\r\n}\r\n\r\n.jp-weights-table {\r\n    background-image: repeating-linear-gradient(to right, var(--color-back) 0px, var(--color-back) 300px, var(--color-dark) 300px, var(--color-dark) 600px);\r\n    /* Move right because first column is 200px instead of 300px */\r\n    /* Showing 200px of void behind background */\r\n    background-position: 200px 0;\r\n\r\n    border-spacing: 0;\r\n}\r\n\r\n.jp-weights-table .jp-parent-indicator {\r\n    font-weight: normal;\r\n    font-style: italic;\r\n    font-size: 0.9em;\r\n}\r\n\r\n.jp-weights-table .jp-parent-name {\r\n    font-weight: bold;\r\n}\r\n\r\n.jp-weights-table .jp-group-header .jp-group-remove {\r\n    opacity: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove {\r\n    background-color: var(--color-button);\r\n    opacity: 1;\r\n}\r\n\r\n.jp-weights-table .jp-group-header:hover .jp-group-remove:hover {\r\n    background-color: var(--color-accent);\r\n    color: var(--color-accent_text);\r\n}\r\n\r\n.jp-weights-table .jp-vertex-row {\r\n    height: 30px;\r\n}\r\n\r\n.jp-weights-table td,\r\n.jp-weights-table th {\r\n    min-width: 300px;\r\n    max-width: 300px;\r\n}\r\n\r\n.jp-weights-table td:first-child,\r\n.jp-weights-table th:first-child {\r\n    min-width: 200px;\r\n    max-width: 200px;\r\n}\r\n\r\n.jp-weights-table .jp-weight-vertex-cell {\r\n    text-align: center;\r\n    /* width: calc(200px / 3); */\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell {\r\n    text-align: center;\r\n    /* width: calc(200px / 3); */\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell input {\r\n    text-align: right;\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-has-influence {\r\n    background-color: var(--group-color-dark);\r\n    color: var(--color-text);\r\n}\r\n\r\n.jp-weights-table .jp-weight-percentage-cell.jp-no-influence {\r\n    /* background-color: var(--color-dark); */\r\n}\r\n\r\n.jp-weights-table .jp-vertex-component {\r\n    /* width: 33.3%; */\r\n}\r\n\r\n.jp-weight-checked {\r\n    color: var(--color-text);\r\n}\r\n\r\n.jp-weight-unchecked {\r\n    color: var(--color-text);\r\n}\r\n\r\n.jp-corner {\r\n    position: relative;\r\n}\r\n\r\n.jp-corner::before {\r\n    content: "";\r\n    position: absolute;\r\n    pointer-events: none;\r\n    top: 0;\r\n    right: 0;\r\n    border-width: 4px;\r\n    border-style: solid;\r\n    border-color: var(--corner-color);\r\n    border-bottom-color: transparent !important;\r\n    border-left-color: transparent !important;\r\n}\r\n\r\n.jp-corner-x {\r\n    --corner-color: var(--color-axis-x);\r\n}\r\n\r\n.jp-corner-y {\r\n    --corner-color: var(--color-axis-y);\r\n}\r\n\r\n.jp-corner-z {\r\n    --corner-color: var(--color-axis-z);\r\n}\r\n';
             /***/        },
         /***/ 941: 
         /***/ function(__unused_webpack_module, exports, __webpack_require__) {

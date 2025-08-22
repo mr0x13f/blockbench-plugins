@@ -34,7 +34,7 @@ index fc44a9d..ca9c45f 100644
  	/**
  	 * Removes a listener from a Blockbench event.
 diff --git a/node_modules/blockbench-types/types/canvas.d.ts b/node_modules/blockbench-types/types/canvas.d.ts
-index 550d83a..0a170b3 100644
+index 550d83a..e465ea9 100644
 --- a/node_modules/blockbench-types/types/canvas.d.ts
 +++ b/node_modules/blockbench-types/types/canvas.d.ts
 @@ -66,7 +66,7 @@ declare namespace Canvas {
@@ -55,6 +55,13 @@ index 550d83a..0a170b3 100644
  	/**
  	 * Raycast on the currently selected preview
  	 */
+@@ -283,4 +285,6 @@ declare class NodePreviewController {
+ 	updateFaces(instance: OutlinerNode): void
+ 	updatePaintingGrid(instance: OutlinerNode): void
+ 	updateHighlight(instance: OutlinerNode, ...args: any[]): void
++	updatePixelGrid(element: OutlinerNode): void
++	fixWireframe(element: OutlinerNode): void
+ }
 diff --git a/node_modules/blockbench-types/types/dialog.d.ts b/node_modules/blockbench-types/types/dialog.d.ts
 index 6162e0f..97e9db9 100644
 --- a/node_modules/blockbench-types/types/dialog.d.ts
@@ -72,9 +79,18 @@ index 6162e0f..97e9db9 100644
  
  type FormResultValue = string | number | boolean | []
 diff --git a/node_modules/blockbench-types/types/mesh.d.ts b/node_modules/blockbench-types/types/mesh.d.ts
-index fb315a5..03ecaca 100644
+index fb315a5..69366bf 100644
 --- a/node_modules/blockbench-types/types/mesh.d.ts
 +++ b/node_modules/blockbench-types/types/mesh.d.ts
+@@ -38,7 +38,7 @@ declare class MeshFace extends Face {
+ 	 * @param normalize If true, the values will be normalized.
+ 	 * @param alt_tri On quads, if true, this will return the normal of the second tri instead of the first
+ 	 */
+-	getNormal(normalize: boolean, alt_tri?: boolean): ArrayVector3
++	getNormal(normalize?: boolean, alt_tri?: boolean): ArrayVector3
+ 	/**
+ 	 * Calculates which pixels the UV face occupies, and returns them as a map
+ 	 */
 @@ -165,6 +165,8 @@ declare class Mesh extends OutlinerElement {
  	static hasAny: () => boolean
  	/**Check if any elements of the type are currently selected */
@@ -159,10 +175,10 @@ index 790ba10..d85f308 100644
  	 * Identifier of another panel to insert this one above
  	 */
 diff --git a/node_modules/blockbench-types/types/three.d.ts b/node_modules/blockbench-types/types/three.d.ts
-index fa4f301..48974fd 100644
+index fa4f301..f986452 100644
 --- a/node_modules/blockbench-types/types/three.d.ts
 +++ b/node_modules/blockbench-types/types/three.d.ts
-@@ -1,9 +1,10 @@
+@@ -1,13 +1,18 @@
 -import three from 'three'
 +import THREE from 'three'
  
@@ -175,3 +191,11 @@ index fa4f301..48974fd 100644
  		fix_rotation?: three.Euler
  		fix_position?: three.Vector3
  		no_export?: boolean
+ 		isElement?: boolean
+ 		isGroup?: boolean
+ 	}
++
++	interface LineSegments {
++		vertex_order?: string[]
++	}
+ }

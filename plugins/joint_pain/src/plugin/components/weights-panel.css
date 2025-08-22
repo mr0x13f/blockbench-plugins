@@ -73,7 +73,7 @@
 
 .jp-weights-table .jp-weight-percentage-cell.jp-has-influence {
     background-color: var(--group-color-dark);
-    color: var(--color-accent_text);
+    color: var(--color-text);
 }
 
 .jp-weights-table .jp-weight-percentage-cell.jp-no-influence {
@@ -84,7 +84,11 @@
     /* width: 33.3%; */
 }
 
-.jp-weight-check {
+.jp-weight-checked {
+    color: var(--color-text);
+}
+
+.jp-weight-unchecked {
     color: var(--color-text);
 }
 
