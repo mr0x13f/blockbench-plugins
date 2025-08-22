@@ -98,17 +98,23 @@
                 value: !0
             }), exports.loadSkinnedMeshPreview = function loadSkinnedMeshPreview() {
                 (0, replace_method_1.replaceMethod)(Animator, "stackAnimations", (function(original, animations, in_loop, controller_blend_values = 0) {
-                    original(animations, in_loop, controller_blend_values), (0, util_1.isVertexWeightEnabledFor)(Project) && function skinMeshes() {
-                        console.log("skin!"), Outliner.elements.filter((e => "mesh" === e.type)).map((e => e)).forEach(skinMesh);
-                    }();
+                    original(animations, in_loop, controller_blend_values), (0, util_1.isVertexWeightEnabledFor)(Project) && skinMeshes();
+                })), (0, replace_method_1.replaceMethod)(Animator, "showDefaultPose", (function(original, no_matrix_update) {
+                    original(no_matrix_update), (0, util_1.isVertexWeightEnabledFor)(Project) && skinMeshes();
                 }));
             };
             const replace_method_1 = __webpack_require__(740), util_1 = __webpack_require__(266);
+            function skinMeshes() {
+                Outliner.elements.filter((e => "mesh" === e.type)).map((e => e)).forEach(skinMesh);
+            }
             function skinMesh(element) {
-                let previewMesh = element.mesh, outline = previewMesh.outline, vertexPoints = previewMesh.vertex_points, transposedVertices = {}, outlineVertexOrder = outline.vertex_order, positionBuffer = [], normalBuffer = [], vertexPointPositionBuffer = [], outlinePositionBuffer = [];
+                var _a;
+                let previewMesh = element.mesh, outline = previewMesh.outline, vertexPoints = previewMesh.vertex_points, transposedVertices = {};
                 for (let [vertexId, vertex] of Object.entries(element.vertices)) {
-                    let vertexWeights;
-                    null != vertexWeights || (vertexWeights = {});
+                    let vertexWeights = null === (_a = element.jp_weights) || void 0 === _a ? void 0 : _a[vertexId];
+                    null != vertexWeights || (vertexWeights = {}), "arm_left" === element.name && [ "D1jz", "PCxt", "Rndw", "csvZ", "jraI" ].includes(vertexId) && (vertexWeights = {
+                        "becc810e-369e-2427-19e8-f5328e20de59": 1
+                    });
                     let idleWorldPos = previewMesh.localToWorld(new THREE.Vector3(...vertex)), parentLocalPos = previewMesh.parent.worldToLocal(idleWorldPos), weightedAverageWorldPos = new THREE.Vector3, totalWeight = 0;
                     for (let [groupId, groupWeight] of Object.entries(vertexWeights)) {
                         let groupNode = Canvas.scene.getObjectByName(groupId);
@@ -123,21 +129,18 @@
                         transposedVertices[vertexId] = weightedAverageLocalPos.toArray();
                     }
                 }
-                for (let [faceKey, face] of Object.entries(element.faces)) if (2 === face.vertices.length) ; else if (face.vertices.length >= 3) {
-                    let indexOffset = positionBuffer.length / 3, faceIndices = {};
-                    face.vertices.forEach(((vertexId, i) => {
-                        if (!element.vertices[vertexId]) throw new Error(`Face "${faceKey}" in mesh "${element.name}" contains an invalid vertex key "${vertexId}"`);
-                        positionBuffer.push(...transposedVertices[vertexId]), faceIndices[vertexId] = indexOffset + i;
-                    }));
+                let positionBuffer = [], normalBuffer = [];
+                for (let face of Object.values(element.faces)) if (face.vertices.length >= 3) {
+                    positionBuffer.push(...face.vertices.flatMap((vertexId => transposedVertices[vertexId])));
                     let normal = face.getNormal(!0);
                     normalBuffer.push(...Array(face.vertices.length).fill(normal).flatMap((x => x)));
                 }
-                vertexPointPositionBuffer.push(...Object.values(transposedVertices).flatMap((x => x))), 
-                outlinePositionBuffer.push(...outlineVertexOrder.flatMap((vertexId => transposedVertices[vertexId]))), 
                 previewMesh.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(positionBuffer), 3)), 
-                previewMesh.geometry.setAttribute("normal", new THREE.BufferAttribute(new Float32Array(normalBuffer), 3)), 
+                previewMesh.geometry.setAttribute("normal", new THREE.BufferAttribute(new Float32Array(normalBuffer), 3));
+                let outlinePositionBuffer = outline.vertex_order.flatMap((vertexId => transposedVertices[vertexId]));
+                outline.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(outlinePositionBuffer), 3));
+                let vertexPointPositionBuffer = Object.values(transposedVertices).flatMap((x => x));
                 vertexPoints.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vertexPointPositionBuffer), 3)), 
-                outline.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(outlinePositionBuffer), 3)), 
                 previewMesh.geometry.setAttribute("highlight", new THREE.BufferAttribute(new Uint8Array(outlinePositionBuffer.length / 3).fill(previewMesh.geometry.attributes.highlight.array[0]), 1)), 
                 previewMesh.geometry.computeBoundingBox(), previewMesh.geometry.computeBoundingSphere(), 
                 vertexPoints.geometry.computeBoundingSphere(), outline.geometry.computeBoundingSphere(), 

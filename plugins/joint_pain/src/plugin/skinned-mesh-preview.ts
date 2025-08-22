@@ -10,11 +10,16 @@ export function loadSkinnedMeshPreview() {
             skinMeshes();
     });
 
+    replaceMethod(Animator, 'showDefaultPose', function(original, no_matrix_update) {
+        original(no_matrix_update);
+
+        if (isVertexWeightEnabledFor(Project))
+            skinMeshes();
+    });
+
 }
 
 function skinMeshes() {
-    console.log('skin!');
-
     let meshes = Outliner.elements
         .filter(e => e.type === 'mesh')
         .map(e => e as Mesh);
@@ -30,28 +35,30 @@ function skinMesh(element: Mesh) {
     // At this point all Groups' preview nodes have been posed,
     // so we don't need to care about the animations at all
 
+    // If the Groups are in idle pose (like after Animator.showDefaultPose()),
+    // then it will effectively undo any skinning
+
     // Largely based on Mesh.preview_controller.updateGeometry() @ mesh.js:1039
+    // skips changing the face indices and the outline's vertex order
 
     let previewMesh = element.mesh as THREE.Mesh;
     let outline = previewMesh.outline as THREE.LineSegments;
     let vertexPoints = previewMesh.vertex_points as THREE.Points;
 
     let transposedVertices: {[vertexId:string]:ArrayVector3} = {};
-    let outlineVertexOrder = outline.vertex_order as string[];
-    // TODO: we can reuse current
-    // outlineVertexOrder.empty();
-    
-    // let indices: number[] = [];
-    let positionBuffer: number[] = [];
-    let normalBuffer: number[] = [];
-    let vertexPointPositionBuffer: number[] = [];
-    let outlinePositionBuffer: number[] = [];
 
     // Transpose and store all vertices of the mesh
     for (let [vertexId, vertex] of Object.entries(element.vertices)) {
-        let vertexWeights: {[groupId: string]: number }|undefined = undefined;
+
+        let vertexWeights: {[groupId: string]: number }|undefined = element.jp_weights?.[vertexId];
         // If no vertex weights are set, treat as empty weights
         vertexWeights ??= {} as {[groupId:string]:number};
+
+        // TODO: remove debug
+        if (element.name === 'arm_left' && ['D1jz', 'PCxt', 'Rndw', 'csvZ', 'jraI'].includes(vertexId)) {// bottom vertices of of left_arm
+            // Group left_arm_lower -> 100%
+            vertexWeights = { 'becc810e-369e-2427-19e8-f5328e20de59': 1 };
+        }
 
         // No weights, just stay idle
         let idleWorldPos = previewMesh.localToWorld(new THREE.Vector3(...vertex));
@@ -89,60 +96,33 @@ function skinMesh(element: Mesh) {
         }
     }
 
-    // Build vertex position buffer, face indices and outline order
-    for (let [faceKey, face] of Object.entries(element.faces)) {
+    let positionBuffer: number[] = [];
+    let normalBuffer:   number[] = [];
 
-        if (face.vertices.length === 2) {
-            // Outline
-            // TODO: we can reuse current
-            // outlineVertexOrder.push(face.vertices[0], face.vertices[1]);
-
-        } else if (face.vertices.length >= 3) {
-
-            let indexOffset = positionBuffer.length / 3;
-            let faceIndices: {[vkey: string]: number} = {};
-            face.vertices.forEach((vertexId, i) => {
-                if (!element.vertices[vertexId])
-                    throw new Error(`Face "${faceKey}" in mesh "${element.name}" contains an invalid vertex key "${vertexId}"`);
-
-                positionBuffer.push(...transposedVertices[vertexId]);
-                faceIndices[vertexId] = indexOffset + i;
-            });
-
-            // Fan out from vertex 0
-            // One triangle for every vertex after the second
-            // TODO: we can reuse this
-            // let sortedVertices = face.getSortedVertices();
-            // for (let tri = 0; tri < face.vertices.length - 2; tri++) {
-            //     indices.push(faceIndices[sortedVertices[0]],
-            //                  faceIndices[sortedVertices[tri + 1]],
-            //                  faceIndices[sortedVertices[tri + 2]] );
-            // }
+    // Build vertex position and normal buffers
+    for (let face of Object.values(element.faces)) {
+        if (face.vertices.length >= 3) {
+            // Add transposed vertices to position buffer
+            positionBuffer.push(...face.vertices.flatMap(vertexId => transposedVertices[vertexId]));
 
             // insert normal components as many times as there is vertices in this face
-            // TODO: calculate manually as this doesnt respect the warped triangles
+            // TODO: calculate manually as this doesnt respect the transposed vertices
             let normal = face.getNormal(true);
             normalBuffer.push(...Array(face.vertices.length).fill(normal).flatMap(x=>x));
-        
-            // Outline
-            // Add line between each vertex of this face, looping back to the first at the end
-            // TODO: we can reuse current
-            // outlineVertexOrder.push(...sortedVertices.flatMap((vertexId, i) => [vertexId, sortedVertices[(i+1) % sortedVertices.length]]));
         }
     }
     
-    // Vertex points
-    vertexPointPositionBuffer.push(...Object.values(transposedVertices).flatMap(x=>x));
-    // Outline
-    outlinePositionBuffer.push(...outlineVertexOrder.flatMap(vertexId => transposedVertices[vertexId]));
+    // Update vertex attributes
+    previewMesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positionBuffer), 3));
+    previewMesh.geometry.setAttribute('normal',   new THREE.BufferAttribute(new Float32Array(normalBuffer), 3));
     
-    // Update geometry
-    // previewMesh.geometry.setIndex(indices);
-    previewMesh.geometry.setAttribute( 'position',  new THREE.BufferAttribute(new Float32Array(positionBuffer), 3));
-    previewMesh.geometry.setAttribute( 'normal',    new THREE.BufferAttribute(new Float32Array(normalBuffer), 3));
-    vertexPoints.geometry.setAttribute('position',  new THREE.BufferAttribute(new Float32Array(vertexPointPositionBuffer), 3));
-    outline.geometry.setAttribute(     'position',  new THREE.BufferAttribute(new Float32Array(outlinePositionBuffer), 3));
-    previewMesh.geometry.setAttribute( 'highlight', new THREE.BufferAttribute(new Uint8Array(outlinePositionBuffer.length/3).fill(previewMesh.geometry.attributes.highlight.array[0]), 1));
+    let outlinePositionBuffer = outline.vertex_order!.flatMap(vertexId => transposedVertices[vertexId]);
+    outline.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(outlinePositionBuffer), 3));
+    
+    let vertexPointPositionBuffer = Object.values(transposedVertices).flatMap(x=>x);
+    vertexPoints.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(vertexPointPositionBuffer), 3));
+    
+    previewMesh.geometry.setAttribute('highlight', new THREE.BufferAttribute(new Uint8Array(outlinePositionBuffer.length/3).fill(previewMesh.geometry.attributes.highlight.array[0]), 1));
 
     // Update collision (for raycasts)
     previewMesh.geometry.computeBoundingBox();

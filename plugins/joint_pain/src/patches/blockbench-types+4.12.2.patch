@@ -101,10 +101,18 @@ index fb315a5..69366bf 100644
  
  interface MeshFaceOptions extends FaceOptions {}
 diff --git a/node_modules/blockbench-types/types/misc.d.ts b/node_modules/blockbench-types/types/misc.d.ts
-index 4f3a447..7b5bdc2 100644
+index 4f3a447..3c99dbf 100644
 --- a/node_modules/blockbench-types/types/misc.d.ts
 +++ b/node_modules/blockbench-types/types/misc.d.ts
-@@ -184,6 +184,7 @@ interface IPropertyType {
+@@ -161,6 +161,7 @@ interface PropertyOptions {
+ 	condition?: ConditionResolvable
+ 	exposed?: boolean
+ 	label?: string
++	description?: string,
+ 	/**
+ 	 * Options used for select types
+ 	 */
+@@ -184,6 +185,7 @@ interface IPropertyType {
  	instance: any
  	vector: ArrayVector3
  	vector2: ArrayVector2
@@ -174,6 +182,22 @@ index 790ba10..d85f308 100644
  	/**
  	 * Identifier of another panel to insert this one above
  	 */
+diff --git a/node_modules/blockbench-types/types/project.d.ts b/node_modules/blockbench-types/types/project.d.ts
+index 270eded..9417a25 100644
+--- a/node_modules/blockbench-types/types/project.d.ts
++++ b/node_modules/blockbench-types/types/project.d.ts
+@@ -109,6 +109,11 @@ declare class ModelProject {
+  */
+ declare let Project: ModelProject | null | undefined
+ 
++declare const ProjectData: Record<string, {
++	model_3d: THREE.Object3D,
++	nodes_3d: Record<string, THREE.Object3D>,
++}>;
++
+ declare function setupProject(format: ModelFormat | string, uuid?: string): boolean
+ declare function newProject(format: ModelFormat | string): boolean
+ declare function setProjectResolution(width: number, height: number, modify_uv?: boolean): void
 diff --git a/node_modules/blockbench-types/types/three.d.ts b/node_modules/blockbench-types/types/three.d.ts
 index fa4f301..f986452 100644
 --- a/node_modules/blockbench-types/types/three.d.ts

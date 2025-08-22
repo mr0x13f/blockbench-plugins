@@ -38,20 +38,6 @@ declare global {
     }
 
     //////////////////////////////////////////////////////////
-    // Missing types
-    //////////////////////////////////////////////////////////
-
-    // TODO: move this to patch file
-    declare const ProjectData: Record<string, {
-        model_3d: THREE.Object3D,
-        nodes_3d: Record<string, THREE.Object3D>,
-    }>;
-
-    interface PropertyOptions {
-        description?: string,
-    }
-
-    //////////////////////////////////////////////////////////
     // Additions from this plugin
     //////////////////////////////////////////////////////////
 
