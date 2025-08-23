@@ -22,11 +22,11 @@ export function loadSkinnedMeshPreview() {
 }
 
 function skinMeshes() {
-    let meshes = Outliner.elements
+    let meshElements = Outliner.elements
         .filter(e => e.type === 'mesh')
         .map(e => e as Mesh);
 
-    meshes.forEach(skinMesh);
+    meshElements.forEach(skinMesh);
 }
 
 // CPU skin a mesh and its related gizmos
@@ -93,15 +93,16 @@ function skinMesh(element: Mesh) {
 
     // Build vertex position and normal buffers
     for (let face of Object.values(element.faces)) {
-        if (face.vertices.length >= 3) {
-            // Add transposed vertices to position buffer
-            positionBuffer.push(...face.vertices.flatMap(vertexId => transposedVertices[vertexId]));
+        if (face.vertices.length < 3)
+            continue;
 
-            // insert normal components as many times as there is vertices in this face
-            // TODO: calculate manually as this doesnt respect the transposed vertices
-            let normal = face.getNormal(true);
-            normalBuffer.push(...Array(face.vertices.length).fill(normal).flatMap(x=>x));
-        }
+        // Add transposed vertices to position buffer
+        positionBuffer.push(...face.vertices.flatMap(vertexId => transposedVertices[vertexId]));
+
+        // insert normal components as many times as there is vertices in this face
+        // TODO: calculate manually as this doesnt respect the transposed vertices
+        let normal = face.getNormal(true);
+        normalBuffer.push(...Array(face.vertices.length).fill(normal).flatMap(x=>x));
     }
     
     // Update vertex attributes

@@ -104,15 +104,16 @@ index 6162e0f..97e9db9 100644
  
  type FormResultValue = string | number | boolean | []
 diff --git a/node_modules/blockbench-types/types/group.d.ts b/node_modules/blockbench-types/types/group.d.ts
-index 8d7c17d..2930bba 100644
+index 8d7c17d..ba63f05 100644
 --- a/node_modules/blockbench-types/types/group.d.ts
 +++ b/node_modules/blockbench-types/types/group.d.ts
-@@ -62,7 +62,7 @@ declare class Group extends OutlinerNode {
+@@ -62,7 +62,8 @@ declare class Group extends OutlinerNode {
  	cem_animations?: any[]
  	cem_attach?: boolean
  	cem_scale?: number
 -	mesh: THREE.Mesh
 +	mesh: THREE.Object3D
++	color: number
  
  	static preview_controller: NodePreviewController
  

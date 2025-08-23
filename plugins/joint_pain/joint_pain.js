@@ -298,7 +298,8 @@
                     }
                 }
                 let positionBuffer = [], normalBuffer = [];
-                for (let face of Object.values(element.faces)) if (face.vertices.length >= 3) {
+                for (let face of Object.values(element.faces)) {
+                    if (face.vertices.length < 3) continue;
                     positionBuffer.push(...face.vertices.flatMap((vertexId => transposedVertices[vertexId])));
                     let normal = face.getNormal(!0);
                     normalBuffer.push(...Array(face.vertices.length).fill(normal).flatMap((x => x)));
@@ -411,6 +412,10 @@
                 (0, defer_1.deferRemoveElement)(document.head.appendChild(Interface.createElement("style", {
                     type: "text/css"
                 }, style)));
+            }, exports.hexColorToVector = function hexColorToVector(hexColor) {
+                hexColor.startsWith("#") && (hexColor = hexColor.substring(1));
+                let r = parseInt(hexColor.substring(0, 2), 16) / 255, g = parseInt(hexColor.substring(2, 4), 16) / 255, b = parseInt(hexColor.substring(4, 6), 16) / 255;
+                return new THREE.Vector3(r, g, b);
             };
             const defer_1 = __webpack_require__(40);
             exports.shaderPrecisionHeader = `\n#ifdef GL_ES\n    precision ${isApp ? "highp" : "mediump"} float;\n#endif\n`
@@ -486,7 +491,7 @@
             /***/        },
         /***/ 479: 
         /***/ module => {
-            module.exports = "// Shader used for the Weights view mode\r\n// identical to solid apart from using a vertex attribute for color\r\n\r\nuniform bool SHADE;\r\nuniform float BRIGHTNESS;\r\n\r\nvarying float light;\r\nvarying float lift;\r\nvarying vec3 weightColor;\r\n\r\nvoid main(void) {\r\n\r\n    gl_FragColor = vec4(lift + color * light * BRIGHTNESS, 1.0);\r\n\r\n    if (lift > 0.1) {\r\n        gl_FragColor.b = gl_FragColor.b * 1.16;\r\n        gl_FragColor.g = gl_FragColor.g * 1.04;\r\n    }\r\n    if (lift > 0.2) {\r\n        gl_FragColor.r = gl_FragColor.r * 0.6;\r\n        gl_FragColor.g = gl_FragColor.g * 0.7;\r\n    }\r\n\r\n}\r\n";
+            module.exports = "// Shader used for the Weights view mode\r\n// identical to solid apart from using a vertex attribute for color\r\n\r\nuniform bool SHADE;\r\nuniform float BRIGHTNESS;\r\n\r\nvarying float light;\r\nvarying float lift;\r\nvarying vec3 jp_weight_color;\r\n\r\nvoid main(void) {\r\n\r\n    gl_FragColor = vec4(lift + jp_weight_color * light * BRIGHTNESS, 1.0);\r\n\r\n    if (lift > 0.1) {\r\n        gl_FragColor.b = gl_FragColor.b * 1.16;\r\n        gl_FragColor.g = gl_FragColor.g * 1.04;\r\n    }\r\n    if (lift > 0.2) {\r\n        gl_FragColor.r = gl_FragColor.r * 0.6;\r\n        gl_FragColor.g = gl_FragColor.g * 0.7;\r\n    }\r\n\r\n}\r\n";
             /***/        },
         /***/ 523: 
         /***/ function(__unused_webpack_module, exports, __webpack_require__) {
@@ -523,7 +528,23 @@
                 });
                 (0, replace_method_1.replaceMethod)(Mesh.preview_controller, "updateFaces", (function(original, element) {
                     if ("weights" === (null === Project || void 0 === Project ? void 0 : Project.view_mode)) {
-                        element.mesh.material = weightsMaterial, this.dispatchEvent("update_faces", {
+                        element.mesh.material = weightsMaterial, function updateVerticesGroupColor() {
+                            var _a;
+                            let meshElements = Outliner.elements.filter((e => "mesh" === e.type)).map((e => e)), groupColors = Object.fromEntries(Group.all.map((group => [ group.uuid, (0, 
+                            util_1.hexColorToVector)(markerColors[group.color].standard) ])));
+                            for (let element of meshElements) {
+                                let previewMesh = element.mesh, weightsColorBuffer = [];
+                                for (let face of Object.values(element.faces)) if (!(face.vertices.length < 3)) for (let vertexId of face.vertices) {
+                                    let vertexWeights = null === (_a = element.jp_weights) || void 0 === _a ? void 0 : _a[vertexId], weightedAverageColor = new THREE.Vector3, totalWeight = 0;
+                                    for (let [groupId, groupWeight] of Object.entries(vertexWeights)) weightedAverageColor = weightedAverageColor.addScaledVector(groupColors[groupId], groupWeight), 
+                                    totalWeight += totalWeight;
+                                    weightedAverageColor = 0 === totalWeight ? groupColors[element.parent.uuid] : weightedAverageColor.divideScalar(totalWeight), 
+                                    weightsColorBuffer.push(...weightedAverageColor.toArray());
+                                }
+                                previewMesh.geometry.setAttribute("jp_weights_color", new THREE.BufferAttribute(new Float32Array(weightsColorBuffer), 3));
+                            }
+                        }
+                        /***/ (), this.dispatchEvent("update_faces", {
                             element
                         });
                     } else original(element);
