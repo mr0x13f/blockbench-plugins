@@ -405,15 +405,16 @@
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {
             Object.defineProperty(exports, "__esModule", {
                 value: !0
-            }), exports.isVertexWeightEnabledFor = function isVertexWeightEnabledFor(project) {
+            }), exports.shaderPrecisionHeader = void 0, exports.isVertexWeightEnabledFor = function isVertexWeightEnabledFor(project) {
                 return null != (null == project ? void 0 : project.jp_vertex_weights) && "disabled" !== project.jp_vertex_weights;
             }, exports.addStyle = function addStyle(style) {
                 (0, defer_1.deferRemoveElement)(document.head.appendChild(Interface.createElement("style", {
                     type: "text/css"
                 }, style)));
-            }
-            /***/;
+            };
             const defer_1 = __webpack_require__(40);
+            exports.shaderPrecisionHeader = `\n#ifdef GL_ES\n    precision ${isApp ? "highp" : "mediump"} float;\n#endif\n`
+            /***/;
         },
         /***/ 351: 
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {
@@ -483,8 +484,17 @@
                 null === (_b = null === (_a = document.querySelector("#mode_selector")) || void 0 === _a ? void 0 : _a.__vue__) || void 0 === _b || _b.$forceUpdate();
             }
             /***/        },
+        /***/ 479: 
+        /***/ module => {
+            module.exports = "// Shader used for the Weights view mode\r\n// identical to solid apart from using a vertex attribute for color\r\n\r\nuniform bool SHADE;\r\nuniform float BRIGHTNESS;\r\n\r\nvarying float light;\r\nvarying float lift;\r\nvarying vec3 weightColor;\r\n\r\nvoid main(void) {\r\n\r\n    gl_FragColor = vec4(lift + color * light * BRIGHTNESS, 1.0);\r\n\r\n    if (lift > 0.1) {\r\n        gl_FragColor.b = gl_FragColor.b * 1.16;\r\n        gl_FragColor.g = gl_FragColor.g * 1.04;\r\n    }\r\n    if (lift > 0.2) {\r\n        gl_FragColor.r = gl_FragColor.r * 0.6;\r\n        gl_FragColor.g = gl_FragColor.g * 0.7;\r\n    }\r\n\r\n}\r\n";
+            /***/        },
         /***/ 523: 
-        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
+        /***/ function(__unused_webpack_module, exports, __webpack_require__) {
+            var __importDefault = this && this.__importDefault || function(mod) {
+                return mod && mod.__esModule ? mod : {
+                    default: mod
+                };
+            };
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             }), exports.loadWeightsViewMode = function loadWeightsViewMode() {
@@ -492,15 +502,34 @@
                     name: "Weights",
                     icon: "rheumatology",
                     condition: () => !!(0, util_1.isVertexWeightEnabledFor)(Project) && (!Toolbox.selected.allowed_view_modes || Toolbox.selected.allowed_view_modes.includes("weights"))
-                }, (0, defer_1.defer)((() => delete BarItems.view_mode.options.weights)), (0, replace_method_1.replaceMethod)(Mesh.preview_controller, "updateFaces", (function(original, element) {
-                    "weights" === (null === Project || void 0 === Project ? void 0 : Project.view_mode) ? (console.log("a"), 
-                    this.dispatchEvent("update_faces", {
-                        element
-                    })) : original(element);
+                }, (0, defer_1.defer)((() => delete BarItems.view_mode.options.weights)), (0, defer_1.deferRemoveElement)(BarItems.view_mode.node.appendChild(Interface.createElement("div", {
+                    class: "select_option",
+                    key: "weights"
+                }, Interface.createElement("i", {
+                    class: "material-icons notranslate icon"
+                }, "rheumatology"))));
+                let weightsMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        SHADE: {
+                            value: settings.shading.value
+                        },
+                        BRIGHTNESS: {
+                            value: settings.brightness.value / 50
+                        }
+                    },
+                    vertexShader: SolidMaterialShaders.vertShader,
+                    fragmentShader: util_1.shaderPrecisionHeader + weightsFragmentShader_glsl_1.default,
+                    side: THREE.DoubleSide
+                });
+                (0, replace_method_1.replaceMethod)(Mesh.preview_controller, "updateFaces", (function(original, element) {
+                    if ("weights" === (null === Project || void 0 === Project ? void 0 : Project.view_mode)) {
+                        element.mesh.material = weightsMaterial, this.dispatchEvent("update_faces", {
+                            element
+                        });
+                    } else original(element);
                 }));
-            }
-            /***/;
-            const defer_1 = __webpack_require__(40), replace_method_1 = __webpack_require__(740), util_1 = __webpack_require__(266);
+            };
+            const defer_1 = __webpack_require__(40), replace_method_1 = __webpack_require__(740), util_1 = __webpack_require__(266), weightsFragmentShader_glsl_1 = __importDefault(__webpack_require__(479));
         },
         /***/ 740: 
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {

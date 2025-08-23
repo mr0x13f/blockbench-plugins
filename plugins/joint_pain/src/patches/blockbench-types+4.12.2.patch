@@ -1,3 +1,23 @@
+diff --git a/node_modules/blockbench-types/types/action.d.ts b/node_modules/blockbench-types/types/action.d.ts
+index 28d48bc..e57f85b 100644
+--- a/node_modules/blockbench-types/types/action.d.ts
++++ b/node_modules/blockbench-types/types/action.d.ts
+@@ -166,6 +166,7 @@ declare global {
+ 		description: string
+ 		icon?: string
+ 		category?: string
++		options?: {[key:string]: BarItemOptions}
+ 
+ 		node: HTMLElement
+ 		nodes: HTMLElement[]
+@@ -463,6 +464,7 @@ declare global {
+ 		animation_channel: string
+ 		select(): this | undefined
+ 		trigger(event: Event): boolean
++		allowed_view_modes?: string[]
+ 	}
+ 	class Widget extends BarItem {
+ 		constructor(id: string, options: WidgetOptions)
 diff --git a/node_modules/blockbench-types/types/animation.d.ts b/node_modules/blockbench-types/types/animation.d.ts
 index c9e1afb..3e2f32d 100644
 --- a/node_modules/blockbench-types/types/animation.d.ts
@@ -34,7 +54,7 @@ index fc44a9d..ca9c45f 100644
  	/**
  	 * Removes a listener from a Blockbench event.
 diff --git a/node_modules/blockbench-types/types/canvas.d.ts b/node_modules/blockbench-types/types/canvas.d.ts
-index 550d83a..e465ea9 100644
+index 550d83a..c75f1f2 100644
 --- a/node_modules/blockbench-types/types/canvas.d.ts
 +++ b/node_modules/blockbench-types/types/canvas.d.ts
 @@ -66,7 +66,7 @@ declare namespace Canvas {
@@ -55,12 +75,17 @@ index 550d83a..e465ea9 100644
  	/**
  	 * Raycast on the currently selected preview
  	 */
-@@ -283,4 +285,6 @@ declare class NodePreviewController {
+@@ -283,4 +285,11 @@ declare class NodePreviewController {
  	updateFaces(instance: OutlinerNode): void
  	updatePaintingGrid(instance: OutlinerNode): void
  	updateHighlight(instance: OutlinerNode, ...args: any[]): void
 +	updatePixelGrid(element: OutlinerNode): void
 +	fixWireframe(element: OutlinerNode): void
++}
++
++declare const SolidMaterialShaders: {
++	vertShader: string
++	fragShader: string
  }
 diff --git a/node_modules/blockbench-types/types/dialog.d.ts b/node_modules/blockbench-types/types/dialog.d.ts
 index 6162e0f..97e9db9 100644
