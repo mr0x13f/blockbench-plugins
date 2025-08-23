@@ -2,6 +2,7 @@ import { defer, deferRemoveElement } from './defer';
 import { replaceMethod } from './replace-method';
 import { isVertexWeightEnabledFor, shaderPrecisionHeader, hexColorToVector } from './util';
 import weightsFragmentShader from './shaders/weightsFragmentShader.glsl';
+import weightsVertextShader from './shaders/weightsVertexShader.glsl';
 
 export function loadWeightsViewMode() {
 
@@ -17,16 +18,11 @@ export function loadWeightsViewMode() {
     };
     defer(() => delete BarItems['view_mode'].options!['weights']);
     deferRemoveElement(BarItems['view_mode'].node.appendChild(Interface.createElement('div',
-        {
-            class: 'select_option',
-            key: 'weights',
-        },
+        { class: 'select_option', key: 'weights' },
         Interface.createElement('i',
-            {
-                class: 'material-icons notranslate icon',
-            },
+            { class: 'material-icons notranslate icon' },
             'rheumatology'
-        ),
+        )
     )));
 
     let weightsMaterial = new THREE.ShaderMaterial({
@@ -34,9 +30,9 @@ export function loadWeightsViewMode() {
             SHADE:      { value: settings.shading.value },
             BRIGHTNESS: { value: settings.brightness.value / 50 },
         },
-        vertexShader: SolidMaterialShaders.vertShader,
+        vertexShader: weightsVertextShader,
         fragmentShader: shaderPrecisionHeader + weightsFragmentShader,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
     });
 
     replaceMethod(Mesh.preview_controller, 'updateFaces', function (original, element) {
@@ -78,7 +74,7 @@ function updateVerticesGroupColor() {
                 continue;
 
             for (let vertexId of face.vertices) {
-                let vertexWeights: {[groupId:string]:number}|undefined = element.jp_weights?.[vertexId];
+                let vertexWeights: {[groupId:string]:number}|undefined = element.jp_weights?.[vertexId] ?? {};
                 let weightedAverageColor = new THREE.Vector3;
                 let totalWeight = 0;
 
@@ -104,5 +100,4 @@ function updateVerticesGroupColor() {
         previewMesh.geometry.setAttribute('jp_weights_color', new THREE.BufferAttribute(new Float32Array(weightsColorBuffer), 3));
 
     }
-
 }

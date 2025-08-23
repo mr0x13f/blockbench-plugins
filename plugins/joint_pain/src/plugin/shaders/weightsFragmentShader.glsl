@@ -6,11 +6,11 @@ uniform float BRIGHTNESS;
 
 varying float light;
 varying float lift;
-varying vec3 jp_weight_color;
+varying vec3 vjp_weight_color;
 
 void main(void) {
 
-    gl_FragColor = vec4(lift + jp_weight_color * light * BRIGHTNESS, 1.0);
+    gl_FragColor = vec4(lift + vjp_weight_color * light * BRIGHTNESS, 1.0);
 
     if (lift > 0.1) {
         gl_FragColor.b = gl_FragColor.b * 1.16;
