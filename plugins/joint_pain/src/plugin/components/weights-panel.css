@@ -1,6 +1,7 @@
 
 .jp-weights-panel {
     overflow: scroll;
+    --jp-weight-column-width: 260px;
 }
 
 .jp-weights-panel .icon {
@@ -8,7 +9,7 @@
 }
 
 .jp-weights-table {
-    background-image: repeating-linear-gradient(to right, var(--color-back) 0px, var(--color-back) 300px, var(--color-dark) 300px, var(--color-dark) 600px);
+    background-image: repeating-linear-gradient(to right, var(--color-back) 0px, var(--color-back) var(--jp-weight-column-width), var(--color-dark) var(--jp-weight-column-width), var(--color-dark) calc(2 * var(--jp-weight-column-width)));
     /* Move right because first column is 200px instead of 300px */
     /* Showing 200px of void behind background */
     background-position: 200px 0;
@@ -47,8 +48,8 @@
 
 .jp-weights-table td,
 .jp-weights-table th {
-    min-width: 300px;
-    max-width: 300px;
+    min-width: var(--jp-weight-column-width);
+    max-width: var(--jp-weight-column-width);
 }
 
 .jp-weights-table td:first-child,
@@ -78,6 +79,7 @@
 
 .jp-weights-table .jp-weight-percentage-cell.jp-no-influence {
     /* background-color: var(--color-dark); */
+    opacity: 50%;
 }
 
 .jp-weights-table .jp-vertex-component {

@@ -26,7 +26,7 @@ This functino calls `animation.getBoneAnimator(node).displayFrame(multiplier)` f
 `timeline_animators.js@468 BoneAnimator.displayFrame() `
 Calls `BoneAnimator.displayPosition()` etc based on calculation from `BoneAnimator.interpolate()`
 Stacking is done based on "last values" from `Animator._last_values`
-Each animation channel has its own instance of an Animator. The type depends on the type of channel. We only care about BoneAnimator. A BoneAnimator holds a reference to the relevant group.
+Each animation channels has its own instance of an Animator. The type depends on the type of channel. We only care about BoneAnimator. A BoneAnimator holds a reference to the relevant group.
 
 We don't need to edit this, as this only sets the positions of the groups.
 We need to jump in after this is done.
@@ -45,3 +45,4 @@ to update vertices
 # Weight View Mode
 
 The default view modes are handled in `updateFaces() @ mesh.js:1145`
+The view modes dropdown is defined in `preview.js:2195`

@@ -23,15 +23,6 @@ export function loadWeightsMode() {
             formats: [ 'free' ],
         },
         selectElements: false,
-        onSelect() {
-            Interface.addSuggestedModifierKey('shift', 'Reveal texture');
-            document.querySelector('.preview_view_mode_menu')?.classList.add('jp-hidden');
-
-        },
-        onUnselect() {
-            Interface.removeSuggestedModifierKey('shift', 'Reveal texture');
-            document.querySelector('.preview_view_mode_menu')?.classList.remove('jp-hidden');
-        },
     }));
     Panels['outliner'].condition.modes.push('weights');
     defer(() => Panels['outliner'].condition.modes.remove('weights'));

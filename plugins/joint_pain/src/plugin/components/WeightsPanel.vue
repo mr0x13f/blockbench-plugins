@@ -2,19 +2,22 @@
     <div class="jp-weights-panel">
         <table class="jp-weights-table">
             <tr>
-                <th style="font-weight: normal">
-                    <i class="fa_big icon far fa-gem"></i>
-                    <span :style="{
-                        'background':    mesh.backgroundGradient,
-                        'border-radius': '5px',
-                        'color':         '#cacad4',
-                        'text-shadow':   '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
-                        'padding':       '2px 10px',
-                        'font-weight':   'bold',
-                        'font-size':     '1.1em',
-                    }">
-                        {{ mesh.name }}
-                    </span>
+                <th style="font-weight: normal; height: 70px" class="jp-vbox">
+                    <div style="margin-top: 10px">
+                        <i class="fa_big icon far fa-gem"></i>
+                        <span :style="{
+                            'background':    mesh.backgroundGradient,
+                            'border-radius': '5px',
+                            'color':         '#cacad4',
+                            'text-shadow':   '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+                            'padding':       '2px 10px',
+                            'font-weight':   'bold',
+                            'font-size':     '1.1em',
+                        }">
+                            {{ mesh.name }}
+                        </span>
+                    </div>
+                    <span style="color: var(--color-subtle_text)">VERTICES</span>
                 </th>
                 <th v-for="(group, groupIndex) in mesh.groups" :key="groupIndex" class="jp-group-header">
                     <span v-if="groupIndex === 0">
@@ -68,28 +71,29 @@ export default {
     data: () => ({
         projectVertexWeightSetting: 'one',
         mesh: {
-            name: 'arm_right',
+            name: 'arm_left',
             // background: createColorStripGradient(120, createHashColor('right_arm_upper', 0.5, 0.5), createHashColor('right_arm_lower', 0.5, 0.5), createHashColor('asdfasdfadfsas0', 0.5, 0.5)),
             backgroundGradient: 'hsl(200, 50%, 50%)',
             groups: [
-                { name: 'right_arm_upper', color: 'hsl(200, 50%, 50%)', dark: 'hsl(200, 50%, 30%)' },
-                { name: 'right_arm_lower', color: 'hsl(120, 50%, 50%)', dark: 'hsl(120, 50%, 30%)' },
+                { name: 'left_arm_upper', color: 'hsl(200, 50%, 50%)', dark: 'hsl(200, 50%, 30%)' },
+                { name: 'left_arm_lower', color: 'hsl(120, 50%, 50%)', dark: 'hsl(120, 50%, 30%)' },
+                { name: 'root',           color: 'hsl( 10, 50%, 50%)', dark: 'hsl( 10, 50%, 30%)' },
             ],
             vertices: [
-                { id: 'PCxt', pos: [-4.5005, -2.5003, -3.2502], weights: [1, 0] },
-                { id: 'VzUC', pos: [-2.5,    0,       2      ], weights: [1, 0] },
-                { id: 'ByEv', pos: [2.5,     0,       2      ], weights: [1, 0] },
-                { id: 'D1jz', pos: [-1.5,    -4,      2.7    ], weights: [1, 0] },
-                { id: 'uePO', pos: [-3.25,   0,       0      ], weights: [0, 1] },
-                { id: 'Rndw', pos: [3.25,    2.5,     0      ], weights: [0, 1] },
-                { id: 'jraI', pos: [-3,      0,       1.5    ], weights: [0, 1] },
-                { id: 'csvZ', pos: [1.5,     2.5,     2.75   ], weights: [0, 1] },
-                { id: 'zObx', pos: [1.5,     2.5,     -3.25  ], weights: [1, 0] },
-                { id: 'oyg2', pos: [-2.5,    0,       2      ], weights: [1, 0] },
-                { id: 'aCrN', pos: [2.5,     0,       2      ], weights: [1, 0] },
-                { id: 'zUrF', pos: [-1.5,    -4,      2.7    ], weights: [1, 0] },
-                { id: 'lQPJ', pos: [-3.25,   0,       0      ], weights: [0, 1] },
-                { id: 'EFfh', pos: [3.25,    2.5,     0      ], weights: [0, 1] },
+                { id: 'PCxt', pos: [-4.5005, -2.5003, -3.2502], weights: [0, 0, 1] },
+                { id: 'VzUC', pos: [-2.5,    0,       2      ], weights: [0, 0, 1] },
+                { id: 'ByEv', pos: [2.5,     0,       2      ], weights: [0, 0, 1] },
+                { id: 'D1jz', pos: [-1.5,    -4,      2.7    ], weights: [0, 0, 1] },
+                { id: 'uePO', pos: [-3.25,   0,       0      ], weights: [0, 0, 1] },
+                { id: 'Rndw', pos: [3.25,    2.5,     0      ], weights: [1, 0, 0] },
+                { id: 'jraI', pos: [-3,      0,       1.5    ], weights: [1, 0, 0] },
+                { id: 'csvZ', pos: [1.5,     2.5,     2.75   ], weights: [1, 0, 0] },
+                { id: 'zObx', pos: [1.5,     2.5,     -3.25  ], weights: [1, 0, 0] },
+                { id: 'oyg2', pos: [-2.5,    0,       2      ], weights: [0, 1, 0] },
+                { id: 'aCrN', pos: [2.5,     0,       2      ], weights: [0, 1, 0] },
+                { id: 'zUrF', pos: [-1.5,    -4,      2.7    ], weights: [0, 1, 0] },
+                { id: 'lQPJ', pos: [-3.25,   0,       0      ], weights: [0, 1, 0] },
+                { id: 'EFfh', pos: [3.25,    2.5,     0      ], weights: [0, 1, 0] },
             ],
         }
     }),

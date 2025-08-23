@@ -3,6 +3,7 @@ import { loadSkinnedMeshPreview } from './skinned-mesh-preview';
 import { loadGltfImport } from './gltf-import';
 import { loadGltfExport } from './gltf-export';
 import { loadWeightsMode } from './weights-mode';
+import { loadWeightsViewMode } from './weights-view-mode';
 import { loadBlenderIntegration } from './blender-integration';
 import globalStyles from './components/styles.css'
 import { addStyle } from './util';
@@ -57,8 +58,9 @@ BBPlugin.register('joint_pain', {
 
         addStyle(globalStyles);
 
-        loadWeightsMode();
         loadSkinnedMeshPreview();
+        loadWeightsViewMode();
+        loadWeightsMode();
         loadGltfImport();
         loadGltfExport();
         loadBlenderIntegration();

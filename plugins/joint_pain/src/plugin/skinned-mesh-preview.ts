@@ -56,24 +56,20 @@ function skinMesh(element: Mesh) {
         // If no vertex weights are set, treat as empty weights
         vertexWeights ??= {} as {[groupId:string]:number};
 
-        // No weights, just stay idle
-        let idleWorldPos = previewMesh.localToWorld(new THREE.Vector3(...vertex));
-        // Vertex position in parent group's local space (not element's local space)
-        let parentLocalPos = previewMesh.parent!.worldToLocal(idleWorldPos);
-
         // find weighted average world pos of influencing bones
         let weightedAverageWorldPos = new THREE.Vector3();
         let totalWeight = 0;
         for (let [groupId, groupWeight] of Object.entries(vertexWeights)) {
-            let groupNode = Canvas.scene.getObjectByName(groupId);
+            let group = Group.uuids[groupId] as Group;
+            let groupNode = group.mesh;
             if (groupNode == undefined || !groupNode.isGroup)
                 continue; // Invalid group node, simply ignore
 
-            // TODO: this is wrong, this is as if the mesh was attached to this group directly
-            // we need to find what the offset that the mesh would have to this group in idle pose,
-            // then add that offset to the current actual group transform
-            let worldPosAsGroupChild = groupNode.localToWorld(parentLocalPos);
-            weightedAverageWorldPos = weightedAverageWorldPos.addScaledVector(worldPosAsGroupChild, groupWeight);
+            let idleWorldPos = new THREE.Vector3(...vertex).add(new THREE.Vector3(...element.origin));
+            let groupOriginWorld = new THREE.Vector3(...group.origin);
+            let idleGroupLocalPos = idleWorldPos.sub(groupOriginWorld);
+            let posedWorldPos = groupNode.localToWorld(idleGroupLocalPos);
+            weightedAverageWorldPos = weightedAverageWorldPos.addScaledVector(posedWorldPos, groupWeight);
             // Count up total weight
             totalWeight += groupWeight;
         }

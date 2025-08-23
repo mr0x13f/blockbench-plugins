@@ -78,8 +78,21 @@ index 6162e0f..97e9db9 100644
  }
  
  type FormResultValue = string | number | boolean | []
+diff --git a/node_modules/blockbench-types/types/group.d.ts b/node_modules/blockbench-types/types/group.d.ts
+index 8d7c17d..2930bba 100644
+--- a/node_modules/blockbench-types/types/group.d.ts
++++ b/node_modules/blockbench-types/types/group.d.ts
+@@ -62,7 +62,7 @@ declare class Group extends OutlinerNode {
+ 	cem_animations?: any[]
+ 	cem_attach?: boolean
+ 	cem_scale?: number
+-	mesh: THREE.Mesh
++	mesh: THREE.Object3D
+ 
+ 	static preview_controller: NodePreviewController
+ 
 diff --git a/node_modules/blockbench-types/types/mesh.d.ts b/node_modules/blockbench-types/types/mesh.d.ts
-index fb315a5..69366bf 100644
+index fb315a5..a2f07f9 100644
 --- a/node_modules/blockbench-types/types/mesh.d.ts
 +++ b/node_modules/blockbench-types/types/mesh.d.ts
 @@ -38,7 +38,7 @@ declare class MeshFace extends Face {
@@ -91,7 +104,17 @@ index fb315a5..69366bf 100644
  	/**
  	 * Calculates which pixels the UV face occupies, and returns them as a map
  	 */
-@@ -165,6 +165,8 @@ declare class Mesh extends OutlinerElement {
+@@ -117,6 +117,9 @@ declare class Mesh extends OutlinerElement {
+ 		[vkey: string]: MeshSeamValue
+ 	}
+ 
++	origin: ArrayVector3
++	position: ArrayVector3
++
+ 	extend(options: Partial<MeshOptions>): this
+ 
+ 	/**
+@@ -165,6 +168,8 @@ declare class Mesh extends OutlinerElement {
  	static hasAny: () => boolean
  	/**Check if any elements of the type are currently selected */
  	static hasSelected: () => boolean
