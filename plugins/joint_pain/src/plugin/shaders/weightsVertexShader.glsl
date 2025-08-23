@@ -1,11 +1,14 @@
+// Fragment shader used for the Weights view mode
+// identical to solid apart from passing through jp_weights_color to the fragment shader
+
 attribute float highlight;
-attribute vec3 jp_weight_color;
+attribute vec3 jp_weights_color;
 
 uniform bool SHADE;
 
 varying float light;
 varying float lift;
-varying vec3 vjp_weight_color;
+varying vec3 vjp_weights_color;
 
 float AMBIENT = 0.1;
 float XFAC = -0.05;
@@ -31,6 +34,6 @@ void main()
     
     vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
     gl_Position = projectionMatrix * mvPosition;
-    
-    vjp_weight_color = jp_weight_color;
+
+    vjp_weights_color = jp_weights_color;
 }

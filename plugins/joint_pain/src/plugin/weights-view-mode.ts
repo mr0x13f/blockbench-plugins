@@ -25,6 +25,8 @@ export function loadWeightsViewMode() {
         )
     )));
 
+    // TODO: toggle shading doesn't work :(
+
     let weightsMaterial = new THREE.ShaderMaterial({
         uniforms: {
             SHADE:      { value: settings.shading.value },
@@ -43,6 +45,9 @@ export function loadWeightsViewMode() {
 
             // TODO: do this at a different time
             updateVerticesGroupColor()
+
+            // TODO: maybe this also
+            Canvas.updateShading();
 
             this.dispatchEvent('update_faces', {element});
 
@@ -78,9 +83,10 @@ function updateVerticesGroupColor() {
                 let weightedAverageColor = new THREE.Vector3;
                 let totalWeight = 0;
 
+                // TODO: consider calculating colors for the vertices in a seperate loop and storing it, depends if its faster
                 for (let [groupId, groupWeight] of Object.entries(vertexWeights)) {
                     weightedAverageColor = weightedAverageColor.addScaledVector(groupColors[groupId], groupWeight);
-                    totalWeight += totalWeight;
+                    totalWeight += groupWeight;
                 }
 
                 // If no weights were applied, use parent's color

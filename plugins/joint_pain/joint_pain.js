@@ -404,7 +404,7 @@
         /***/ ,
         /***/ 241: 
         /***/ module => {
-            module.exports = "attribute float highlight;\r\nattribute vec3 jp_weight_color;\r\n\r\nuniform bool SHADE;\r\n\r\nvarying float light;\r\nvarying float lift;\r\nvarying vec3 vjp_weight_color;\r\n\r\nfloat AMBIENT = 0.1;\r\nfloat XFAC = -0.05;\r\nfloat ZFAC = 0.05;\r\n\r\nvoid main()\r\n{\r\n\r\n    if (SHADE) {\r\n        vec3 N = normalize( vec3( modelViewMatrix * vec4(normal, 0.0) ) );\r\n        light = (0.2 + abs(N.z) * 0.8) * (1.0-AMBIENT) + N.x*N.x * XFAC + N.y*N.y * ZFAC + AMBIENT;\r\n    } else {\r\n        light = 1.0;\r\n    }\r\n\r\n    if (highlight == 2.0) {\r\n        lift = 0.3;\r\n    } else if (highlight == 1.0) {\r\n        lift = 0.12;\r\n    } else {\r\n        lift = 0.0;\r\n    }\r\n    \r\n    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );\r\n    gl_Position = projectionMatrix * mvPosition;\r\n    \r\n    vjp_weight_color = jp_weight_color;\r\n}\r\n";
+            module.exports = "// Fragment shader used for the Weights view mode\r\n// identical to solid apart from passing through jp_weights_color to the fragment shader\r\n\r\nattribute float highlight;\r\nattribute vec3 jp_weights_color;\r\n\r\nuniform bool SHADE;\r\n\r\nvarying float light;\r\nvarying float lift;\r\nvarying vec3 vjp_weights_color;\r\n\r\nfloat AMBIENT = 0.1;\r\nfloat XFAC = -0.05;\r\nfloat ZFAC = 0.05;\r\n\r\nvoid main()\r\n{\r\n\r\n    if (SHADE) {\r\n        vec3 N = normalize( vec3( modelViewMatrix * vec4(normal, 0.0) ) );\r\n        light = (0.2 + abs(N.z) * 0.8) * (1.0-AMBIENT) + N.x*N.x * XFAC + N.y*N.y * ZFAC + AMBIENT;\r\n    } else {\r\n        light = 1.0;\r\n    }\r\n\r\n    if (highlight == 2.0) {\r\n        lift = 0.3;\r\n    } else if (highlight == 1.0) {\r\n        lift = 0.12;\r\n    } else {\r\n        lift = 0.0;\r\n    }\r\n    \r\n    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );\r\n    gl_Position = projectionMatrix * mvPosition;\r\n\r\n    vjp_weights_color = jp_weights_color;\r\n}\r\n";
             /***/        },
         /***/ 266: 
         /***/ (__unused_webpack_module, exports, __webpack_require__) => {
@@ -495,7 +495,7 @@
             /***/        },
         /***/ 479: 
         /***/ module => {
-            module.exports = "// Shader used for the Weights view mode\r\n// identical to solid apart from using a vertex attribute for color\r\n\r\nuniform bool SHADE;\r\nuniform float BRIGHTNESS;\r\n\r\nvarying float light;\r\nvarying float lift;\r\nvarying vec3 vjp_weight_color;\r\n\r\nvoid main(void) {\r\n\r\n    gl_FragColor = vec4(lift + vjp_weight_color * light * BRIGHTNESS, 1.0);\r\n\r\n    if (lift > 0.1) {\r\n        gl_FragColor.b = gl_FragColor.b * 1.16;\r\n        gl_FragColor.g = gl_FragColor.g * 1.04;\r\n    }\r\n    if (lift > 0.2) {\r\n        gl_FragColor.r = gl_FragColor.r * 0.6;\r\n        gl_FragColor.g = gl_FragColor.g * 0.7;\r\n    }\r\n\r\n}\r\n";
+            module.exports = "// Fragment shader used for the Weights view mode\r\n// identical to solid apart from using a vertex attribute for color\r\n\r\nuniform bool SHADE;\r\nuniform float BRIGHTNESS;\r\n\r\nvarying float light;\r\nvarying float lift;\r\nvarying vec3 vjp_weights_color;\r\n\r\nvoid main(void) {\r\n\r\n    gl_FragColor = vec4(lift + vjp_weights_color * light * BRIGHTNESS, 1.0);\r\n\r\n    if (lift > 0.1) {\r\n        gl_FragColor.b = gl_FragColor.b * 1.16;\r\n        gl_FragColor.g = gl_FragColor.g * 1.04;\r\n    }\r\n    if (lift > 0.2) {\r\n        gl_FragColor.r = gl_FragColor.r * 0.6;\r\n        gl_FragColor.g = gl_FragColor.g * 0.7;\r\n    }\r\n\r\n}\r\n";
             /***/        },
         /***/ 523: 
         /***/ function(__unused_webpack_module, exports, __webpack_require__) {
@@ -541,14 +541,14 @@
                                 for (let face of Object.values(element.faces)) if (!(face.vertices.length < 3)) for (let vertexId of face.vertices) {
                                     let vertexWeights = null !== (_b = null === (_a = element.jp_weights) || void 0 === _a ? void 0 : _a[vertexId]) && void 0 !== _b ? _b : {}, weightedAverageColor = new THREE.Vector3, totalWeight = 0;
                                     for (let [groupId, groupWeight] of Object.entries(vertexWeights)) weightedAverageColor = weightedAverageColor.addScaledVector(groupColors[groupId], groupWeight), 
-                                    totalWeight += totalWeight;
+                                    totalWeight += groupWeight;
                                     weightedAverageColor = 0 === totalWeight ? groupColors[element.parent.uuid] : weightedAverageColor.divideScalar(totalWeight), 
                                     weightsColorBuffer.push(...weightedAverageColor.toArray());
                                 }
                                 previewMesh.geometry.setAttribute("jp_weights_color", new THREE.BufferAttribute(new Float32Array(weightsColorBuffer), 3));
                             }
                         }
-                        /***/ (), this.dispatchEvent("update_faces", {
+                        /***/ (), Canvas.updateShading(), this.dispatchEvent("update_faces", {
                             element
                         });
                     } else original(element);
