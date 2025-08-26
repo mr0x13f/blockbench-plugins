@@ -61,7 +61,6 @@ BBPlugin.register('joint_pain', {
         loadSkinnedMeshPreview();
         loadWeightsViewMode();
         loadWeightsMode();
-        loadGltfImport();
         loadGltfExport();
         loadBlenderIntegration();
 

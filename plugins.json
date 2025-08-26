@@ -1160,14 +1160,14 @@
 		"repository": "https://github.com/JannisX11/blockbench-plugins/tree/master/plugins/export_to_3mf"
 	},
 	"joint_pain": {
-		"title": "Joint_Pain",
+		"title": "Joint Pain",
 		"author": "0x13F",
 		"description": "Add vertex weights to your model, akin to skeletal animation",
 		"icon": "rheumatology",
 		"creation_date": "2025-04-18",
 		"version": "1.0.0",
 		"variant": "both",
-		"min_version": "4.12.4",
+		"min_version": "4.12.6",
 		"has_changelog": false,
 		"tags": [
 			"Format: Generic Model",
@@ -1175,5 +1175,21 @@
 			"Exporter"
 		],
 		"repository": "https://github.com/JannisX11/blockbench-plugins/tree/master/plugins/joint_pain"
+	},
+	"gltf_importer": {
+		"title": "glTF Importer",
+		"author": "0x13F",
+		"description": "Import .GLTF and .GLB models",
+		"icon": "icon-gltf",
+		"creation_date": "//TODO:",
+		"version": "1.0.0",
+		"variant": "desktop",
+		"min_version": "4.12.6",
+		"has_changelog": false,
+		"tags": [
+			"Format: Generic Model",
+			"Importer"
+		],
+		"repository": "https://github.com/JannisX11/blockbench-plugins/tree/master/plugins/gltf_importer"
 	}
 }

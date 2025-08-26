@@ -193,54 +193,6 @@
             /* harmony default export */;
             const WeightsPanel = component.exports;
             /***/        },
-        /***/ 93: 
-        /***/ (__unused_webpack_module, exports, __webpack_require__) => {
-            Object.defineProperty(exports, "__esModule", {
-                value: !0
-            }), exports.loadGltfImport = function loadGltfImport() {
-                (0, defer_1.deferDelete)(new Action("import_gltf_weights", {
-                    name: "Import glTF Model",
-                    icon: "icon-gltf",
-                    category: "file",
-                    condition: {
-                        modes: [ "edit" ],
-                        method: () => null === Format || void 0 === Format ? void 0 : Format.meshes
-                    },
-                    click() {
-                        importGltfDialog.show();
-                    }
-                }));
-                let importMenuChildren = MenuBar.menus.file.structure.find((x => "import" === x.id)).children, objImportItemIndex = importMenuChildren.findIndex((x => ("string" == typeof x ? x : x.id).startsWith("import_obj")));
-                importMenuChildren.splice(objImportItemIndex + 1, 0, "import_gltf_weights"), (0, 
-                defer_1.defer)((() => importMenuChildren.splice(importMenuChildren.indexOf("import_gltf_weights"), 1)));
-                let importGltfDialog = (0, defer_1.deferDelete)(new Dialog("jp_import_gltf_dialog", {
-                    title: "Import glTF",
-                    form: {
-                        file: {
-                            type: "file",
-                            label: "glTF file",
-                            return_as: "file",
-                            extensions: [ "gltf", "glb" ],
-                            resource_id: "gltf",
-                            filetype: "glTF Model"
-                        },
-                        scale: {
-                            type: "number",
-                            label: "Model Import Scale",
-                            value: Settings.get("model_export_scale")
-                        }
-                    },
-                    onConfirm(options) {
-                        !function importGltf(options) {
-                            if (null == options.file) throw new Error("Missing glTF import file");
-                            console.log(options);
-                        }
-                        /***/ (options);
-                    }
-                }));
-            };
-            const defer_1 = __webpack_require__(40);
-        },
         /***/ 168: 
         /***/ (__unused_webpack_module, exports) => {
             Object.defineProperty(exports, "__esModule", {
@@ -611,7 +563,7 @@
             Object.defineProperty(exports, "__esModule", {
                 value: !0
             });
-            const defer_1 = __webpack_require__(40), skinned_mesh_preview_1 = __webpack_require__(193), gltf_import_1 = __webpack_require__(93), gltf_export_1 = __webpack_require__(746), weights_mode_1 = __webpack_require__(361), weights_view_mode_1 = __webpack_require__(523), blender_integration_1 = __webpack_require__(351), styles_css_1 = __importDefault(__webpack_require__(950)), util_1 = __webpack_require__(266), deep_cloned_object_property_1 = __webpack_require__(168);
+            const defer_1 = __webpack_require__(40), skinned_mesh_preview_1 = __webpack_require__(193), gltf_export_1 = __webpack_require__(746), weights_mode_1 = __webpack_require__(361), weights_view_mode_1 = __webpack_require__(523), blender_integration_1 = __webpack_require__(351), styles_css_1 = __importDefault(__webpack_require__(950)), util_1 = __webpack_require__(266), deep_cloned_object_property_1 = __webpack_require__(168);
             BBPlugin.register("joint_pain", {
                 title: "Joint Pain",
                 author: "0x13F",
@@ -636,7 +588,7 @@
                         default: void 0
                     })), (0, util_1.addStyle)(styles_css_1.default), (0, skinned_mesh_preview_1.loadSkinnedMeshPreview)(), 
                     (0, weights_view_mode_1.loadWeightsViewMode)(), (0, weights_mode_1.loadWeightsMode)(), 
-                    (0, gltf_import_1.loadGltfImport)(), (0, gltf_export_1.loadGltfExport)(), (0, blender_integration_1.loadBlenderIntegration)();
+                    (0, gltf_export_1.loadGltfExport)(), (0, blender_integration_1.loadBlenderIntegration)();
                 },
                 onunload() {
                     (0, defer_1.runDeferred)();

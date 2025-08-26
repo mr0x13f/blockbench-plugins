@@ -1,5 +1,7 @@
 import { defer, deferDelete } from './defer';
 
+// TODO: remove, moved to seperate plugin
+
 export function loadGltfImport() {
     
     deferDelete(new Action('import_gltf_weights', {
