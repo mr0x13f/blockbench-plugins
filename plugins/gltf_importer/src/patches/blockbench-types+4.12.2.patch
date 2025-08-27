@@ -1,0 +1,274 @@
+diff --git a/node_modules/blockbench-types/types/action.d.ts b/node_modules/blockbench-types/types/action.d.ts
+index 28d48bc..e57f85b 100644
+--- a/node_modules/blockbench-types/types/action.d.ts
++++ b/node_modules/blockbench-types/types/action.d.ts
+@@ -166,6 +166,7 @@ declare global {
+ 		description: string
+ 		icon?: string
+ 		category?: string
++		options?: {[key:string]: BarItemOptions}
+ 
+ 		node: HTMLElement
+ 		nodes: HTMLElement[]
+@@ -463,6 +464,7 @@ declare global {
+ 		animation_channel: string
+ 		select(): this | undefined
+ 		trigger(event: Event): boolean
++		allowed_view_modes?: string[]
+ 	}
+ 	class Widget extends BarItem {
+ 		constructor(id: string, options: WidgetOptions)
+diff --git a/node_modules/blockbench-types/types/animation.d.ts b/node_modules/blockbench-types/types/animation.d.ts
+index c9e1afb..3e2f32d 100644
+--- a/node_modules/blockbench-types/types/animation.d.ts
++++ b/node_modules/blockbench-types/types/animation.d.ts
+@@ -154,6 +154,8 @@ declare namespace Animator {
+ 		position: number,
+ 		type: string
+ 	): MolangAutoCompletionItem[]
++
++	function stackAnimations(animations: Animation[], in_loop: boolean, controller_blend_values = 0): void
+ }
+ 
+ interface AddChannelOptions {
+diff --git a/node_modules/blockbench-types/types/blockbench.d.ts b/node_modules/blockbench-types/types/blockbench.d.ts
+index fc44a9d..ca9c45f 100644
+--- a/node_modules/blockbench-types/types/blockbench.d.ts
++++ b/node_modules/blockbench-types/types/blockbench.d.ts
+@@ -297,7 +297,7 @@ declare namespace Blockbench {
+ 	export function addListener<E extends string>(
+ 		event_names: E,
+ 		callback: (data: any) => void
+-	): void
++	): Deletable
+ 	/**
+ 	 * Adds a listener to a Blockbench event.
+ 	 * If you're using TypeScript, You can call this with the type param <EventName> to get the default event names in Blockbench, or leave the param blank for custom events.
+@@ -305,7 +305,7 @@ declare namespace Blockbench {
+ 	 * Blockbench.on<EventName>(...)
+ 	 * ```
+ 	 */
+-	export function on<E extends string>(event_names: E, callback: (data: any) => void): void
++	export function on<E extends string>(event_names: E, callback: (data: any) => void): Deletable
+ 
+ 	/**
+ 	 * Removes a listener from a Blockbench event.
+diff --git a/node_modules/blockbench-types/types/canvas.d.ts b/node_modules/blockbench-types/types/canvas.d.ts
+index 550d83a..c75f1f2 100644
+--- a/node_modules/blockbench-types/types/canvas.d.ts
++++ b/node_modules/blockbench-types/types/canvas.d.ts
+@@ -66,7 +66,7 @@ declare namespace Canvas {
+ 	/**
+ 	 * List of the gizmos (control and UI elements) in the 3D scene
+ 	 */
+-	const gizmos: []
++	const gizmos: THREE.Object3D[]
+ 	/**
+ 	 * The material used for all selection outlines
+ 	 */
+@@ -95,6 +95,8 @@ declare namespace Canvas {
+ 
+ 	const face_order: ['east', 'west', 'up', 'down', 'south', 'north']
+ 
++	let outlines: THREE.Object3D;
++
+ 	/**
+ 	 * Raycast on the currently selected preview
+ 	 */
+@@ -283,4 +285,11 @@ declare class NodePreviewController {
+ 	updateFaces(instance: OutlinerNode): void
+ 	updatePaintingGrid(instance: OutlinerNode): void
+ 	updateHighlight(instance: OutlinerNode, ...args: any[]): void
++	updatePixelGrid(element: OutlinerNode): void
++	fixWireframe(element: OutlinerNode): void
++}
++
++declare const SolidMaterialShaders: {
++	vertShader: string
++	fragShader: string
+ }
+diff --git a/node_modules/blockbench-types/types/dialog.d.ts b/node_modules/blockbench-types/types/dialog.d.ts
+index 6162e0f..97e9db9 100644
+--- a/node_modules/blockbench-types/types/dialog.d.ts
++++ b/node_modules/blockbench-types/types/dialog.d.ts
+@@ -104,6 +104,11 @@ interface FormElement {
+ 	 * @param button_index Index of the clicked button in the buttons list
+ 	 */
+ 	click?: (button_index: number) => void
++
++	return_as?: string,
++	extensions?: string[],
++	resource_id?: string,
++	filetype?: string,
+ }
+ 
+ type FormResultValue = string | number | boolean | []
+diff --git a/node_modules/blockbench-types/types/group.d.ts b/node_modules/blockbench-types/types/group.d.ts
+index 8d7c17d..ba63f05 100644
+--- a/node_modules/blockbench-types/types/group.d.ts
++++ b/node_modules/blockbench-types/types/group.d.ts
+@@ -62,7 +62,8 @@ declare class Group extends OutlinerNode {
+ 	cem_animations?: any[]
+ 	cem_attach?: boolean
+ 	cem_scale?: number
+-	mesh: THREE.Mesh
++	mesh: THREE.Object3D
++	color: number
+ 
+ 	static preview_controller: NodePreviewController
+ 
+diff --git a/node_modules/blockbench-types/types/mesh.d.ts b/node_modules/blockbench-types/types/mesh.d.ts
+index fb315a5..a2f07f9 100644
+--- a/node_modules/blockbench-types/types/mesh.d.ts
++++ b/node_modules/blockbench-types/types/mesh.d.ts
+@@ -38,7 +38,7 @@ declare class MeshFace extends Face {
+ 	 * @param normalize If true, the values will be normalized.
+ 	 * @param alt_tri On quads, if true, this will return the normal of the second tri instead of the first
+ 	 */
+-	getNormal(normalize: boolean, alt_tri?: boolean): ArrayVector3
++	getNormal(normalize?: boolean, alt_tri?: boolean): ArrayVector3
+ 	/**
+ 	 * Calculates which pixels the UV face occupies, and returns them as a map
+ 	 */
+@@ -117,6 +117,9 @@ declare class Mesh extends OutlinerElement {
+ 		[vkey: string]: MeshSeamValue
+ 	}
+ 
++	origin: ArrayVector3
++	position: ArrayVector3
++
+ 	extend(options: Partial<MeshOptions>): this
+ 
+ 	/**
+@@ -165,6 +168,8 @@ declare class Mesh extends OutlinerElement {
+ 	static hasAny: () => boolean
+ 	/**Check if any elements of the type are currently selected */
+ 	static hasSelected: () => boolean
++
++	static preview_controller: NodePreviewController;
+ }
+ 
+ interface MeshFaceOptions extends FaceOptions {}
+diff --git a/node_modules/blockbench-types/types/misc.d.ts b/node_modules/blockbench-types/types/misc.d.ts
+index 4f3a447..3c99dbf 100644
+--- a/node_modules/blockbench-types/types/misc.d.ts
++++ b/node_modules/blockbench-types/types/misc.d.ts
+@@ -161,6 +161,7 @@ interface PropertyOptions {
+ 	condition?: ConditionResolvable
+ 	exposed?: boolean
+ 	label?: string
++	description?: string,
+ 	/**
+ 	 * Options used for select types
+ 	 */
+@@ -184,6 +185,7 @@ interface IPropertyType {
+ 	instance: any
+ 	vector: ArrayVector3
+ 	vector2: ArrayVector2
++	enum: string
+ }
+ 
+ /**
+diff --git a/node_modules/blockbench-types/types/mode.d.ts b/node_modules/blockbench-types/types/mode.d.ts
+index b55e75d..91fb1ed 100644
+--- a/node_modules/blockbench-types/types/mode.d.ts
++++ b/node_modules/blockbench-types/types/mode.d.ts
+@@ -1,7 +1,7 @@
+ /// <reference path="./blockbench.d.ts"/>
+ 
+ interface ModeOptions {
+-	id: string
++	id?: string|undefined
+ 	name: string
+ 	icon?: string
+ 	default_tool?: string
+diff --git a/node_modules/blockbench-types/types/outliner.d.ts b/node_modules/blockbench-types/types/outliner.d.ts
+index 0fa2593..6218f73 100644
+--- a/node_modules/blockbench-types/types/outliner.d.ts
++++ b/node_modules/blockbench-types/types/outliner.d.ts
+@@ -17,6 +17,8 @@ declare class OutlinerNode {
+ 	parent?: Group | 'root'
+ 	menu?: Menu
+ 
++	type: string
++
+ 	/**
+ 	 * Initializes the node. This should always be called when creating nodes that will be used in the outliner.
+ 	 */
+diff --git a/node_modules/blockbench-types/types/panel.d.ts b/node_modules/blockbench-types/types/panel.d.ts
+index 790ba10..d85f308 100644
+--- a/node_modules/blockbench-types/types/panel.d.ts
++++ b/node_modules/blockbench-types/types/panel.d.ts
+@@ -3,7 +3,7 @@
+ type PanelSlot = 'left_bar' | 'right_bar' | 'top' | 'bottom' | 'float' | 'hidden'
+ 
+ interface PanelOptions {
+-	id: string
++	id?: string
+ 	name: string
+ 	icon: string
+ 	menu?: any
+@@ -21,7 +21,7 @@ interface PanelOptions {
+ 	/**
+ 	 * Adds a button to the panel that allows users to pop-out and expand the panel on click
+ 	 */
+-	expand_button: boolean
++	expand_button?: boolean
+ 	toolbars?:
+ 		| {
+ 				[id: string]: Toolbar
+@@ -33,11 +33,11 @@ interface PanelOptions {
+ 				float_position: [number, number]
+ 				float_size: [number, number]
+ 				height: number
+-				folded: boolean
++				folded?: boolean
+ 		  }
+ 		| number
+ 	component?: Vue.Component
+-	default_side: 'right' | 'left'
++	default_side?: 'right' | 'left'
+ 	/**
+ 	 * Identifier of another panel to insert this one above
+ 	 */
+diff --git a/node_modules/blockbench-types/types/project.d.ts b/node_modules/blockbench-types/types/project.d.ts
+index 270eded..9417a25 100644
+--- a/node_modules/blockbench-types/types/project.d.ts
++++ b/node_modules/blockbench-types/types/project.d.ts
+@@ -109,6 +109,11 @@ declare class ModelProject {
+  */
+ declare let Project: ModelProject | null | undefined
+ 
++declare const ProjectData: Record<string, {
++	model_3d: THREE.Object3D,
++	nodes_3d: Record<string, THREE.Object3D>,
++}>;
++
+ declare function setupProject(format: ModelFormat | string, uuid?: string): boolean
+ declare function newProject(format: ModelFormat | string): boolean
+ declare function setProjectResolution(width: number, height: number, modify_uv?: boolean): void
+diff --git a/node_modules/blockbench-types/types/three.d.ts b/node_modules/blockbench-types/types/three.d.ts
+index fa4f301..f986452 100644
+--- a/node_modules/blockbench-types/types/three.d.ts
++++ b/node_modules/blockbench-types/types/three.d.ts
+@@ -1,13 +1,18 @@
+-import three from 'three'
++import THREE from 'three'
+ 
+ declare module 'three' {
+ 	interface Object3D {
+ 		/**The outline mesh of the mesh */
+-		outline?: three.Object3D | three.Mesh
++		outline?: three.LineSegments
++		vertex_points?: three.Points
+ 		fix_rotation?: three.Euler
+ 		fix_position?: three.Vector3
+ 		no_export?: boolean
+ 		isElement?: boolean
+ 		isGroup?: boolean
+ 	}
++
++	interface LineSegments {
++		vertex_order?: string[]
++	}
+ }

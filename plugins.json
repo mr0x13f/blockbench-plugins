@@ -1183,7 +1183,7 @@
 		"icon": "icon-gltf",
 		"creation_date": "//TODO:",
 		"version": "1.0.0",
-		"variant": "desktop",
+		"variant": "both",
 		"min_version": "4.12.6",
 		"has_changelog": false,
 		"tags": [

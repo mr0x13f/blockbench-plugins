@@ -8,7 +8,7 @@ module.exports = {
     entry: './plugin/plugin.ts',
     output: {
         path: path.resolve(__dirname, '..'),
-        filename: 'gltf_importers.js',
+        filename: 'joint_pain.js',
     },
     module: {
         rules: [

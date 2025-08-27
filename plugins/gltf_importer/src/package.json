@@ -1,0 +1,21 @@
+{
+    "name": "joint_pain",
+    "scripts": {
+        "postinstall": "patch-package",
+        "build": "webpack",
+        "watch": "webpack watch"
+    },
+    "devDependencies": {
+        "@types/three": "^0.157.0",
+        "blockbench-types": "^4.12.2",
+        "patch-package": "^8.0.0",
+        "terser-webpack-plugin": "^5.3.14",
+        "three": "^0.176.0",
+        "ts-loader": "^9.5.2",
+        "typescript": "^5.8.3",
+        "vue-loader": "^15.9.6",
+        "vue-template-compiler": "^2.6.12",
+        "webpack": "^5.99.7",
+        "webpack-cli": "^6.0.1"
+    }
+}

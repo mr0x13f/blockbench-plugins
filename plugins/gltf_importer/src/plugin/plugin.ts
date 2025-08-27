@@ -1,12 +1,7 @@
-(function() {
+import { deferDelete, runDeferred } from './defer';
 
-const path = require('path');
+BBPlugin.register('gltf_importer', {
 
-let deferred = [];
-
-// MARK: 🟥 plugin
-
-Plugin.register('gltf_importer', {
     title:         'glTF Importer',
     author:        '0x13F',
     description:   'Import .GLTF and .GLB models',
@@ -18,6 +13,7 @@ Plugin.register('gltf_importer', {
     has_changelog: false,   
     tags:          [ 'Format: Generic Model', 'Importer' ],
 	repository:    'https://github.com/JannisX11/blockbench-plugins/tree/master/plugins/gltf_importer',
+
     onload() {
         
         deferDelete(new Action('import_gltf', {
@@ -93,38 +89,8 @@ Plugin.register('gltf_importer', {
             }));
 
     },
-    onunload() {
 
-        for (let lambda of deferred)
-            lambda();
-        
+    onunload() {
+        runDeferred();
     },
 });
-
-// MARK: 🟥 gltf import
-
-function importGltf(options) {
-    if (options.file == undefined)
-        throw new Error('Missing glTF import file');
-
-    console.log(options);
-
-    // TODO: show warning if a uv coord is outside of 0..1 suggesting repeating textures
-}
-
-// MARK: 🟥 util
-
-function defer(lambda) {
-    deferred.push(lambda);
-}
-
-function deferDelete(deletable) {
-    if (deletable.delete == undefined) {
-        console.warn('deferDelete() called with object that isn\'t deletable: ', deletable);
-        return;
-    }
-    defer(() => deletable.delete());
-    return deletable;
-}
-
-})();
