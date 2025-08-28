@@ -68,21 +68,11 @@ Plugin.register('gltf_importer', {
                             ['merge']: 'Merge all meshes into one',
                         },
                     },
-                    ['armature']: {
-                        type: 'checkbox',
-                        label: 'Import Armature as Groups',
-                        value: true,
-                    },
                     ['nodes']: {
                         type: 'checkbox',
                         label: 'Import Nodes as Groups',
                         value: true,
                     },
-                    // ['vertex_weights']: {
-                    //     type: 'checkbox',
-                    //     label: 'Import Vertex Weights (if available)',
-                    //     value: false,
-                    // },
                 },
         
                 onConfirm(options) {
